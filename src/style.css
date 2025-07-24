@@ -6,11 +6,9 @@
   background-color: #242424;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* * {
+  @apply p-0 m-0 box-border;
+} */
 
 h1 {
   @apply text-4xl md:text-5xl font-bold mb-4;
@@ -29,7 +27,7 @@ h4 {
 }
 
 p {
-  @apply text-base md:text-lg mb-4 leading-relaxed;
+  @apply text-base md:text-lg leading-relaxed;
 }
 
 .btn {
@@ -62,4 +60,8 @@ p {
 
 .btn-lg {
   @apply px-6 py-3 text-lg;
+}
+
+.nav-item {
+  @apply p-2 hover:bg-blue-400 cursor-pointer rounded text-base;
 }
