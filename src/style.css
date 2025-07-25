@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light dark;
+  /* color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #242424; */
 }
 
 /* * {
@@ -30,8 +30,13 @@ p {
   @apply text-base md:text-lg leading-relaxed;
 }
 
+td,
+th {
+  @apply text-sm leading-relaxed font-normal;
+}
+
 .btn {
-  @apply px-4 py-2 rounded-md font-medium shadow transition-colors duration-200;
+  @apply px-4 py-2 rounded-md font-medium shadow transition-colors duration-200 cursor-pointer;
 }
 
 .btn-primary {
@@ -63,5 +68,13 @@ p {
 }
 
 .nav-item {
-  @apply p-2 hover:bg-blue-400 cursor-pointer rounded text-base;
+  @apply p-2 pr-6 pl-6 hover:bg-blue-400 cursor-pointer rounded text-base;
+}
+
+.pagination-btn {
+  @apply rounded-md font-medium transition-colors duration-200 cursor-pointer min-w-[2.3rem] min-h-[2.3rem] text-gray-300 hover:bg-gray-100 hover:text-black;
+}
+
+.pagination-selected-btn {
+  @apply rounded-md  min-w-[2.3rem] min-h-[2.3rem] bg-gray-100 text-black hover:bg-gray-200;
 }
