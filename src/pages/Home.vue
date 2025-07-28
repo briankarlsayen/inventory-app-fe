@@ -1,14 +1,50 @@
 <template>
-  <div
-    class="min-h-screen bg-white flex flex-col items-center justify-center px-4 text-center"
-  >
-    <h1 class="text-4xl md:text-5xl font-bold text-blue-700 mb-4">
-      Welcome to My Vue App
-    </h1>
-    <p class="text-lg md:text-xl text-gray-600 max-w-xl mb-6">
-      This is a simple homepage built with Vue 3, Vite, and Tailwind CSS. Start
-      building your app here!
-    </p>
-    <router-link to="/login" class="btn btn-primary"> Go to Login </router-link>
+  <div class="p-4">
+    <h4 class="pb-8 pt-8">Dashboard</h4>
+    <p>Overview</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="dashboard-card">
+        <span class="text-xs text-gray-600 uppercase">Total Sales</span>
+        <p>
+          {{ totalSales }}
+        </p>
+      </div>
+      <div class="dashboard-card">
+        <span class="text-xs text-gray-600 uppercase">Top Product</span>
+        <p>{{ topProduct }}</p>
+      </div>
+      <div class="dashboard-card">
+        <span class="text-xs text-gray-600 uppercase">Low Stock Count:</span>
+        <p>{{ lowStockCount }}</p>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-row items-center gap-4">
+      <p>Sales</p>
+      <select
+        v-model="selectedRange"
+        class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200 h-fit"
+      >
+        <option value="week">This Week</option>
+        <option value="year">This Year</option>
+      </select>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="flex w-full flex-col">
+        <BarChart :range="selectedRange" />
+      </div>
+      <div class="flex w-full flex-col justify-between">
+        <PieChart :range="selectedRange" />
+      </div>
+    </div>
   </div>
 </template>
+
+<script lang="tsx" setup>
+import { ref } from "vue";
+import BarChart from "../components/BarChart.vue";
+import PieChart from "../components/PieChart.vue";
+const totalSales = 30;
+const topProduct = "Spanish Latte";
+const lowStockCount = 2;
+const selectedRange = ref("week");
+</script>

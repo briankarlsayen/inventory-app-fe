@@ -12,8 +12,21 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="flex w-full h-[100vh]">
+  <div class="flex w-full min-h-[100vh] h-full">
+    <div class="hidden md:flex">
+      <Sidebar />
+    </div>
+    <div class="md:hidden block">
+      <p>Navbar</p>
+    </div>
+
+    <div class="w-full">
+      <router-view />
+    </div>
+  </div>
+  <div class="flex w-full min-h-[100vh] h-full">
     <Sidebar />
+
     <div class="w-full">
       <router-view />
     </div>

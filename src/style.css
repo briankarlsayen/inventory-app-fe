@@ -78,3 +78,10 @@ th {
 .pagination-selected-btn {
   @apply rounded-md  min-w-[2.3rem] min-h-[2.3rem] bg-gray-100 text-black hover:bg-gray-200;
 }
+
+.dashboard-card {
+  @apply rounded-md shadow p-4 text-sm leading-relaxed font-normal w-full max-w-[300px] h-[100px];
+}
+.dashboard-card p {
+  @apply text-base leading-relaxed;
+}
