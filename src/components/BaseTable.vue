@@ -63,11 +63,18 @@
         </button>
       </div>
     </div>
+    <TableFormModal
+      :title="modalTitle"
+      :show="isOpen"
+      @close="isOpen = false"
+      @submit="isOpen = false"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
+import TableFormModal from "./TableFormModal.vue";
 
 const props = defineProps({
   headers: {
@@ -84,9 +91,12 @@ const props = defineProps({
   },
 });
 
+const modalTitle = ref("Add");
+
 defineEmits(["row-click", "add-click"]);
 
 const currentPage = ref(1);
+const isOpen = ref(false);
 
 const totalPages = computed(() => {
   return Math.ceil(props.rows.length / props.perPage);
@@ -110,6 +120,7 @@ function prevPage() {
 }
 
 const handleAddClick = () => {
+  isOpen.value = true;
   console.log("open form");
 };
 

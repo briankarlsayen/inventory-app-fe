@@ -5,8 +5,14 @@ This template should help get you started developing with Vue 3 and TypeScript i
 Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
 
 Dashboard
-[ ] pie chart - sold items
-[ ] bar chart - sales per week/month
-[ ] this month sale data
-[ ] yesterday sale data
-[ ] stocks
+[x] pie chart - sold items
+[x] bar chart - sales per week/month
+[x] this month sale data
+[x] yesterday sale data
+[x] stocks
+
+TODOS
+[x] navbar
+[x] add table form
+[ ] add action column on table
+[ ] logout confirm dialog

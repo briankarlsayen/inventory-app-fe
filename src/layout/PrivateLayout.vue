@@ -1,32 +1,26 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Sidebar from "../components/Sidebar.vue";
-
+import Navbar from "../components/Navbar.vue";
 export default defineComponent({
   name: "PrivateLayout",
   components: {
     Sidebar,
+    Navbar,
   },
   setup() {},
 });
 </script>
 
 <template>
-  <div class="flex w-full min-h-[100vh] h-full">
+  <div class="flex w-full min-h-[100vh] h-full md:flex-row flex-col">
     <div class="hidden md:flex">
       <Sidebar />
     </div>
     <div class="md:hidden block">
-      <p>Navbar</p>
+      <Navbar />
+      <!-- <p>Navbar</p> -->
     </div>
-
-    <div class="w-full">
-      <router-view />
-    </div>
-  </div>
-  <div class="flex w-full min-h-[100vh] h-full">
-    <Sidebar />
-
     <div class="w-full">
       <router-view />
     </div>
