@@ -14,5 +14,6 @@ Dashboard
 TODOS
 [x] navbar
 [x] add table form
-[ ] add action column on table
+[x] add action column on table
+---[x] delete dialog
 [ ] logout confirm dialog

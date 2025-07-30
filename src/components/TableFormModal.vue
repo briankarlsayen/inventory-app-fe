@@ -90,29 +90,45 @@
   </transition>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import FormModal from "./FormModal.vue";
+<script setup lang="tsx">
+interface FormData {
+  id?: number;
+  name?: string;
+  quantity?: string;
+  date?: string;
+}
+import { reactive, ref, watch } from "vue";
 
-// const showModal = ref(false);
-
-defineProps({
-  show: Boolean,
-  title: String,
-});
+const props = defineProps<{
+  show: Boolean;
+  title: String;
+  formData?: FormData;
+}>();
 
 const emit = defineEmits(["close", "submit"]);
 const today = new Date().toISOString().slice(0, 10);
 
-const form = ref({
-  name: "",
-  quantity: "",
-  date: today,
+const form = reactive<FormData>({
+  id: props?.formData?.id,
+  name: props?.formData?.name,
+  quantity: props?.formData?.quantity,
+  date: props?.formData?.date ?? today,
 });
+
+watch(
+  () => props.formData,
+  (newVal) => {
+    form.name = newVal.name;
+    form.quantity = newVal.quantity;
+    form.date = newVal.date;
+  },
+  { deep: true }
+);
 
 function submitForm() {
   if (validateForm()) {
-    console.log("✅ Submitted:", form.value);
+    console.log("✅ Submitted:", form);
+    emit("submit");
     closeModal();
   } else {
     console.log("❌ Validation failed");
@@ -123,21 +139,25 @@ const closeModal = () => {
   emit("close");
 };
 
-const errors = ref({});
+const errors = ref<FormData>({
+  name: "",
+  quantity: "",
+  date: "",
+});
 
 function validateForm() {
   console.log("run this");
   errors.value = {};
 
-  if (!form.value.name.trim()) {
+  if (!form.name.trim()) {
     errors.value.name = "Item name is required.";
   }
 
-  if (!form.value.quantity || form.value.quantity <= 0) {
+  if (!form.quantity || Number(form.quantity) <= 0) {
     errors.value.quantity = "Quantity must be greater than 0.";
   }
 
-  if (!form.value.date) {
+  if (!form.date) {
     errors.value.date = "Date is required.";
   }
 

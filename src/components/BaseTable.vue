@@ -22,6 +22,9 @@
             >
               {{ header.label }}
             </th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
@@ -37,6 +40,21 @@
               class="px-4 py-2 text-sm text-gray-700"
             >
               {{ row[header.key] }}
+            </td>
+            <td class="px-4 py-2 text-sm text-gray-700 flex gap-1">
+              <SquarePen
+                class="hover:bg-gray-100 p-2 rounded-md"
+                color="#e5a50a"
+                :size="36"
+                @click="() => handleOpenEditForm(row)"
+              />
+
+              <Trash
+                class="hover:bg-gray-100 p-2 rounded-md"
+                color="#a51d2d"
+                :size="36"
+                @click="showDialog = true"
+              />
             </td>
           </tr>
         </tbody>
@@ -67,36 +85,63 @@
       :title="modalTitle"
       :show="isOpen"
       @close="isOpen = false"
-      @submit="isOpen = false"
+      @submit="handleSubmit"
+      :formData="formData"
+    />
+
+    <ConfirmDialog
+      :show="showDialog"
+      title="Delete Item"
+      message="Are you sure you want to delete this item? This cannot be undone."
+      @cancel="showDialog = false"
+      @confirm="handleDelete"
     />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import TableFormModal from "./TableFormModal.vue";
+import { SquarePen, Trash } from "lucide-vue-next";
+import ConfirmDialog from "./ConfirmDialog.vue";
 
-const props = defineProps({
-  headers: {
-    type: Array, // [{ key: 'name', label: 'Name' }]
-    required: true,
-  },
-  rows: {
-    type: Array, // [{ name: '', quantity: '', date: '' }]
-    required: true,
-  },
-  perPage: {
-    type: Number,
-    default: 5,
-  },
-});
+interface TableHeader {
+  key: string;
+  label: string;
+}
+interface TableRow {
+  name: string;
+  quantity: string;
+  data: string;
+}
+
+const props = defineProps<{
+  headers: TableHeader[];
+  rows: TableRow[];
+  perPage: number;
+}>();
 
 const modalTitle = ref("Add");
 
-defineEmits(["row-click", "add-click"]);
+const emit = defineEmits([
+  "row-click",
+  "add-click",
+  "add-request",
+  "edit-request",
+  "delete-request",
+]);
 
 const currentPage = ref(1);
 const isOpen = ref(false);
+
+const today = new Date().toISOString().slice(0, 10);
+
+const formData = ref({
+  id: null,
+  name: "",
+  quantity: "",
+  date: today,
+});
 
 const totalPages = computed(() => {
   return Math.ceil(props.rows.length / props.perPage);
@@ -106,6 +151,8 @@ const paginatedRows = computed(() => {
   const start = (currentPage.value - 1) * props.perPage;
   return props.rows.slice(start, start + props.perPage);
 });
+
+const showDialog = ref(false);
 
 function nextPage() {
   if (currentPage.value < totalPages.value) {
@@ -121,10 +168,40 @@ function prevPage() {
 
 const handleAddClick = () => {
   isOpen.value = true;
+  modalTitle.value = "Add";
+  formData.value = {
+    id: null,
+    name: "",
+    quantity: "",
+    date: today,
+  };
   console.log("open form");
 };
 
 const handleFilterClick = () => {
   console.log("open filter form");
 };
+
+const handleOpenEditForm = (item: any) => {
+  isOpen.value = true;
+  modalTitle.value = "Edit";
+
+  formData.value = {
+    ...item,
+  };
+  console.log("open edit form");
+};
+
+const handleSubmit = () => {
+  if (modalTitle.value === "Add") {
+    emit("add-request", "data");
+  } else {
+    emit("edit-request", "data");
+  }
+};
+
+function handleDelete() {
+  emit("delete-request", "data");
+  showDialog.value = false;
+}
 </script>
