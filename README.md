@@ -16,4 +16,13 @@ TODOS
 [x] add table form
 [x] add action column on table
 ---[x] delete dialog
-[ ] logout confirm dialog
+[x] logout confirm dialog
+[ ] UI cleanup
+[ ] api integration
+--- [ ] login
+--- [ ] user details
+--- [ ] stocks
+--- [ ] stock items
+--- [ ] sales
+--- [ ] sale items
+--- [ ] dashboard

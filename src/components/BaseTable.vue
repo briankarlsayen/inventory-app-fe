@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="flex gap-4 justify-between pb-4">
-      <input
+      <div></div>
+      <!-- <input
         class="w-full max-w-80 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300 border text-black"
-      />
+      /> -->
       <div class="flex gap-2">
         <button class="btn btn-outline" @click="handleFilterClick">
           Filter
@@ -99,20 +100,21 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref, computed } from "vue";
 import TableFormModal from "./TableFormModal.vue";
 import { SquarePen, Trash } from "lucide-vue-next";
 import ConfirmDialog from "./ConfirmDialog.vue";
 
-interface TableHeader {
+export interface TableHeader {
   key: string;
   label: string;
 }
-interface TableRow {
+export interface TableRow {
+  id?: number;
   name: string;
-  quantity: string;
-  data: string;
+  quantity: string | number;
+  date: string;
 }
 
 const props = defineProps<{
@@ -175,7 +177,6 @@ const handleAddClick = () => {
     quantity: "",
     date: today,
   };
-  console.log("open form");
 };
 
 const handleFilterClick = () => {
@@ -189,7 +190,6 @@ const handleOpenEditForm = (item: any) => {
   formData.value = {
     ...item,
   };
-  console.log("open edit form");
 };
 
 const handleSubmit = () => {

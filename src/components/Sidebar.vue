@@ -12,7 +12,6 @@ export default defineComponent({
 
     const handleChangePage = (url: string) => {
       currRoute.value = route.path;
-      console.log("currRoute", currRoute.value);
       router.push(url);
     };
     return {
