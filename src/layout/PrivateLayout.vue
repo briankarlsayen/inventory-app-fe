@@ -1,26 +1,48 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
+import ConfirmDialog from "../components/ConfirmDialog.vue";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "PrivateLayout",
   components: {
     Sidebar,
     Navbar,
+    ConfirmDialog,
   },
-  setup() {},
+  setup() {
+    const router = useRouter();
+    const showDialog = ref(false);
+    const handleLogout = () => {
+      showDialog.value = false;
+      router.push("/login");
+    };
+
+    return {
+      showDialog,
+      handleLogout,
+    };
+  },
 });
 </script>
 
 <template>
   <div class="flex w-full min-h-[100vh] h-full md:flex-row flex-col">
     <div class="hidden md:flex">
-      <Sidebar />
+      <Sidebar @click-logout="showDialog = true" />
     </div>
     <div class="md:hidden block">
-      <Navbar />
+      <Navbar @click-logout="showDialog = true" />
       <!-- <p>Navbar</p> -->
     </div>
+    <ConfirmDialog
+      :show="showDialog"
+      title="Logout"
+      message="Are you sure you want to logout?."
+      @cancel="showDialog = false"
+      @confirm="handleLogout"
+    />
     <div class="w-full">
       <router-view />
     </div>

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Sidebar",
+  emits: ["click-logout"],
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -66,6 +67,14 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <span class="text-center p-8 text-base">Logout</span>
+
+    <div class="text-center p-8 text-base">
+      <button
+        class="cursor-pointer hover:underline"
+        @click="$emit('click-logout')"
+      >
+        Logout
+      </button>
+    </div>
   </div>
 </template>

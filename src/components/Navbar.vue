@@ -1,42 +1,24 @@
 <template>
   <div class="bg-blue-600 text-white">
-    <div class="flex items-center gap-1">
-      <button
-        @click="isOpen = !isOpen"
-        class="text-white hover:text-black p-2 cursor-pointer h-12"
-      >
-        <svg
-          v-if="!isOpen"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-1">
+        <button
+          @click="isOpen = !isOpen"
+          class="text-white hover:text-black p-2 cursor-pointer h-12"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-        <svg
-          v-else
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          <Menu v-if="!isOpen" />
+          <X v-else />
+        </button>
+        <p>LOGO</p>
+      </div>
+      <div class="pr-2">
+        <button
+          class="text-white hover:text-black p-2 cursor-pointer h-12"
+          @click="$emit('click-logout')"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-      <p>LOGO</p>
+          <LogOut :size="18" />
+        </button>
+      </div>
     </div>
     <div
       v-if="isOpen"
@@ -81,8 +63,10 @@
   </div>
 </template>
 <script setup lang="tsx">
+import { LogOut, Menu, X } from "lucide-vue-next";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+defineEmits(["click-logout"]);
 const isOpen = ref(false);
 
 const router = useRouter();
