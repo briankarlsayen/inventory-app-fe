@@ -14,8 +14,10 @@
 </template>
 
 <script>
-import { ref, computed, defineComponent } from "vue";
+import { ref, computed, defineComponent, onMounted } from "vue";
 import BaseTable from "../components/BaseTable.vue";
+import { getStocksApi } from "../api/api";
+import { utcToLocaleDate } from "../utlis";
 export default defineComponent({
   name: "Stocks",
   components: {
@@ -26,25 +28,25 @@ export default defineComponent({
       { key: "name", label: "Name" },
       { key: "quantity", label: "Quantity" },
       { key: "date", label: "Date" },
+      { key: "type", label: "Type" },
     ];
 
-    const tableData = [
-      { id: 1, name: "Espresso Beans", quantity: 20, date: "2025-07-25" },
-      { id: 2, name: "Milk Frother", quantity: 10, date: "2025-07-24" },
-      { id: 3, name: "Coffee Filters", quantity: 100, date: "2025-07-23" },
-      { id: 4, name: "Iced Cups", quantity: 200, date: "2025-07-22" },
-      { id: 5, name: "Syrup Vanilla", quantity: 15, date: "2025-07-21" },
-      { id: 6, name: "Espresso Machine", quantity: 3, date: "2025-07-20" },
-      { id: 7, name: "Mugs", quantity: 35, date: "2025-07-19" },
-      { id: 8, name: "Napkins", quantity: 500, date: "2025-07-18" },
-      { id: 9, name: "Coffee Stirrers", quantity: 250, date: "2025-07-17" },
-      { id: 10, name: "Chocolate Powder", quantity: 8, date: "2025-07-16" },
-      { id: 11, name: "Whipped Cream", quantity: 12, date: "2025-07-15" },
-      { id: 12, name: "Green Tea Bags", quantity: 30, date: "2025-07-14" },
-      { id: 13, name: "Lids", quantity: 150, date: "2025-07-13" },
-      { id: 14, name: "Cold Brew Bottles", quantity: 20, date: "2025-07-12" },
-      { id: 15, name: "Sugar Packets", quantity: 300, date: "2025-07-11" },
-    ];
+    const tableData = ref([]);
+
+    onMounted(async () => {
+      const res = await getStocksApi();
+      const formattedData = res?.data.map((item) => {
+        return {
+          id: item?.id,
+          name: item?.item_details?.name,
+          quantity: item?.quantity,
+          date: utcToLocaleDate(item?.date),
+          type: item?.type,
+        };
+      });
+      tableData.value = formattedData;
+      console.log("res", res);
+    });
 
     const handleRowClick = (row) => {
       console.log("Row clicked:", row);

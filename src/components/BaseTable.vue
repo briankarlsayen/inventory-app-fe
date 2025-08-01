@@ -111,7 +111,7 @@ export interface TableHeader {
   label: string;
 }
 export interface TableRow {
-  id?: number;
+  id?: number; // TODO change to string
   name: string;
   quantity: string | number;
   date: string;

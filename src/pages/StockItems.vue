@@ -10,30 +10,42 @@
   </div>
 </template>
 <script setup lang="tsx">
+import { onMounted, ref } from "vue";
 import BaseTable from "../components/BaseTable.vue";
+import { getStockItemsApi } from "../api/api";
+
+interface SampleTableHeader {
+  key: string;
+  label: string;
+  inputType: "text" | "autocomplete" | "date" | "numeric";
+}
+
 const tableHeaders = [
   { key: "name", label: "Name" },
-  { key: "quantity", label: "Quantity" },
-  { key: "date", label: "Date" },
+  { key: "unit", label: "Unit" },
+  { key: "category", label: "Category" },
+  { key: "reorderLevel", label: "Reorder Level" },
 ];
 
-const tableData = [
-  { name: "Espresso Beans", quantity: 20, date: "2025-07-25" },
-  { name: "Milk Frother", quantity: 10, date: "2025-07-24" },
-  { name: "Coffee Filters", quantity: 100, date: "2025-07-23" },
-  { name: "Iced Cups", quantity: 200, date: "2025-07-22" },
-  { name: "Syrup Vanilla", quantity: 15, date: "2025-07-21" },
-  { name: "Espresso Machine", quantity: 3, date: "2025-07-20" },
-  { name: "Mugs", quantity: 35, date: "2025-07-19" },
-  { name: "Napkins", quantity: 500, date: "2025-07-18" },
-  { name: "Coffee Stirrers", quantity: 250, date: "2025-07-17" },
-  { name: "Chocolate Powder", quantity: 8, date: "2025-07-16" },
-  { name: "Whipped Cream", quantity: 12, date: "2025-07-15" },
-  { name: "Green Tea Bags", quantity: 30, date: "2025-07-14" },
-  { name: "Lids", quantity: 150, date: "2025-07-13" },
-  { name: "Cold Brew Bottles", quantity: 20, date: "2025-07-12" },
-  { name: "Sugar Packets", quantity: 300, date: "2025-07-11" },
-];
+const tableData = ref([]);
+
+onMounted(async () => {
+  const res = await getStockItemsApi();
+  if (res?.success) {
+    const formatData = res?.data.map((item) => {
+      return {
+        id: item?.id,
+        name: item?.name,
+        reorderLevel: item?.reorder_level,
+        category: item?.category_details?.name,
+        unit: item?.unit,
+      };
+    });
+    tableData.value = formatData;
+    console.log("res", res);
+  }
+});
+
 const handleRowClick = (row) => {
   console.log("Row clicked:", row);
 };

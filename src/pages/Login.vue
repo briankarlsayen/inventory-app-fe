@@ -15,7 +15,7 @@
             required
           />
         </div>
-        <div class="mb-4 pb-4">
+        <div class="mb-4">
           <label for="password" class="block mb-1 text-gray-700"
             >Password</label
           >
@@ -27,7 +27,18 @@
             required
           />
         </div>
-        <button type="submit" class="btn btn-primary w-full">Login</button>
+        <div class="pb-4">
+          <span class="text-sm text-red-600" v-if="errorMsg">{{
+            errorMsg
+          }}</span>
+        </div>
+        <BaseButton
+          class="btn btn-primary w-full"
+          type="submit"
+          :loading="isLoading"
+        >
+          Login
+        </BaseButton>
       </form>
     </div>
   </div>
@@ -36,17 +47,30 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { loginApi } from "../api/api";
+import BaseButton from "../components/BaseButton.vue";
 const router = useRouter();
 
 const username = ref("");
 const password = ref("");
+const errorMsg = ref("");
+const isLoading = ref(false);
 
-const handleLogin = () => {
-  console.log("login!");
-  const isLogged = true;
-  if (isLogged) {
+const handleLogin = async () => {
+  errorMsg.value = "";
+  isLoading.value = true;
+  const login = await loginApi({
+    username: username.value,
+    password: password.value,
+  });
+
+  if (login?.success) {
+    localStorage.setItem("access", login?.access);
+    localStorage.setItem("refresh", login?.refresh);
     return router.push("/");
   }
+  isLoading.value = false;
+  errorMsg.value = login?.error;
 };
 </script>
 

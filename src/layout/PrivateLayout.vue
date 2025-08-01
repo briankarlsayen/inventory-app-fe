@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
 import ConfirmDialog from "../components/ConfirmDialog.vue";
 import { useRouter } from "vue-router";
+import { proccessLogout } from "../utlis";
 export default defineComponent({
   name: "PrivateLayout",
   components: {
@@ -15,6 +16,7 @@ export default defineComponent({
     const router = useRouter();
     const showDialog = ref(false);
     const handleLogout = () => {
+      proccessLogout();
       showDialog.value = false;
       router.push("/login");
     };
