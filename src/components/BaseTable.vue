@@ -87,7 +87,6 @@
       :show="isOpen"
       @close="isOpen = false"
       @submit="handleSubmit"
-      :formData="formData"
     />
 
     <ConfirmDialog
@@ -105,21 +104,20 @@ import { ref, computed } from "vue";
 import TableFormModal from "./TableFormModal.vue";
 import { SquarePen, Trash } from "lucide-vue-next";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import { useTableStore } from "../stores/tableStore";
 
 export interface TableHeader {
   key: string;
   label: string;
-}
-export interface TableRow {
-  id?: number; // TODO change to string
-  name: string;
-  quantity: string | number;
-  date: string;
+  inputType?: "text" | "autocomplete" | "date" | "number";
+  disabled?: boolean;
+  default?: string | number;
+  rules?: any[];
 }
 
 const props = defineProps<{
   headers: TableHeader[];
-  rows: TableRow[];
+  rows: any[];
   perPage: number;
 }>();
 
@@ -136,14 +134,7 @@ const emit = defineEmits([
 const currentPage = ref(1);
 const isOpen = ref(false);
 
-const today = new Date().toISOString().slice(0, 10);
-
-const formData = ref({
-  id: null,
-  name: "",
-  quantity: "",
-  date: today,
-});
+const store = useTableStore();
 
 const totalPages = computed(() => {
   return Math.ceil(props.rows.length / props.perPage);
@@ -171,12 +162,7 @@ function prevPage() {
 const handleAddClick = () => {
   isOpen.value = true;
   modalTitle.value = "Add";
-  formData.value = {
-    id: null,
-    name: "",
-    quantity: "",
-    date: today,
-  };
+  store.addFields();
 };
 
 const handleFilterClick = () => {
@@ -186,10 +172,7 @@ const handleFilterClick = () => {
 const handleOpenEditForm = (item: any) => {
   isOpen.value = true;
   modalTitle.value = "Edit";
-
-  formData.value = {
-    ...item,
-  };
+  store.editFields(item);
 };
 
 const handleSubmit = () => {

@@ -11,21 +11,55 @@
 </template>
 <script setup lang="tsx">
 import { onMounted, ref } from "vue";
-import BaseTable from "../components/BaseTable.vue";
+import BaseTable, { type TableHeader } from "../components/BaseTable.vue";
 import { getStockItemsApi } from "../api/api";
+import { useTableStore } from "../stores/tableStore";
 
-interface SampleTableHeader {
-  key: string;
-  label: string;
-  inputType: "text" | "autocomplete" | "date" | "numeric";
-}
-
-const tableHeaders = [
-  { key: "name", label: "Name" },
-  { key: "unit", label: "Unit" },
-  { key: "category", label: "Category" },
-  { key: "reorderLevel", label: "Reorder Level" },
+const tableHeaders: TableHeader[] = [
+  {
+    key: "name",
+    label: "Name",
+    default: "",
+    inputType: "text",
+    rules: [{ required: true, message: "Name is required" }],
+  },
+  {
+    key: "unit",
+    label: "Unit",
+    default: "",
+    inputType: "text",
+    rules: [{ required: true, message: "Unit is required" }],
+  },
+  {
+    key: "category",
+    label: "Category",
+    default: "",
+    inputType: "text",
+    rules: [{ required: true, message: "Category is required" }],
+  },
+  {
+    key: "reorderLevel",
+    label: "Reorder Level",
+    default: "0",
+    inputType: "number",
+    rules: [
+      { required: true, message: "Reorder level is required" },
+      {
+        validator: (value: string) => Number(value) > 0,
+        message: "Reorder level must be greater than 0",
+      },
+    ],
+  },
 ];
+
+const store = useTableStore();
+
+const initialFormDetails = Object.fromEntries(
+  tableHeaders?.map(({ key, default: defaultValue }) => [key, defaultValue])
+);
+
+store.setInitialFormData(initialFormDetails);
+store.setInputFields(tableHeaders);
 
 const tableData = ref([]);
 
@@ -42,7 +76,6 @@ onMounted(async () => {
       };
     });
     tableData.value = formatData;
-    console.log("res", res);
   }
 });
 

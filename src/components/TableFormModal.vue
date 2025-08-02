@@ -20,50 +20,33 @@
 
         <form @submit.prevent="submitForm">
           <!-- Item Name -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Item Name</label
-            >
+          <div v-for="item in sampleFormDetails" :key="item.key" class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{
+              item.label
+            }}</label>
             <input
-              v-model="form.name"
+              v-if="item.inputType === 'text'"
+              v-model="form[item.key]"
               type="text"
               class="w-full border rounded px-3 py-2"
-              :class="{ 'border-red-500': errors.name }"
+              :class="{ 'border-red-500': errors[item.key] }"
             />
-            <p v-if="errors.name" class="text-sm text-red-500 mt-1">
-              {{ errors.name }}
-            </p>
-          </div>
-
-          <!-- Quantity -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Quantity</label
-            >
             <input
-              v-model="form.quantity"
+              v-if="item.inputType === 'number'"
+              v-model="form[item.key]"
               type="number"
               class="w-full border rounded px-3 py-2"
-              :class="{ 'border-red-500': errors.quantity }"
+              :class="{ 'border-red-500': errors[item.key] }"
             />
-            <p v-if="errors.quantity" class="text-sm text-red-500 mt-1">
-              {{ errors.quantity }}
-            </p>
-          </div>
-
-          <!-- Date -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Date</label
-            >
             <input
-              v-model="form.date"
+              v-else-if="item.inputType === 'date'"
+              v-model="form[item.key]"
               type="date"
               class="w-full border rounded px-3 py-2"
-              :class="{ 'border-red-500': errors.date }"
+              :class="{ 'border-red-500': errors[item.key] }"
             />
-            <p v-if="errors.date" class="text-sm text-red-500 mt-1">
-              {{ errors.date }}
+            <p v-if="errors[item.key]" class="text-sm text-red-500 mt-1">
+              {{ errors[item.key] }}
             </p>
           </div>
         </form>
@@ -91,42 +74,23 @@
 </template>
 
 <script setup lang="tsx">
-interface FormData {
-  id?: number;
-  name?: string;
-  quantity?: string;
-  date?: string;
-}
-import { reactive, ref, watch } from "vue";
+import { computed } from "vue";
+import { useTableStore } from "../stores/tableStore";
 
-const props = defineProps<{
+defineProps<{
   show: Boolean;
   title: String;
-  formData?: FormData;
 }>();
 
 const emit = defineEmits(["close", "submit"]);
-const today = new Date().toISOString().slice(0, 10);
 
-const form = reactive<FormData>({
-  id: props?.formData?.id,
-  name: props?.formData?.name,
-  quantity: props?.formData?.quantity,
-  date: props?.formData?.date ?? today,
-});
-
-watch(
-  () => props.formData,
-  (newVal) => {
-    form.name = newVal.name;
-    form.quantity = newVal.quantity;
-    form.date = newVal.date;
-  },
-  { deep: true }
-);
+const store = useTableStore();
+const form = computed(() => store.formData);
+const sampleFormDetails = computed(() => store.inputFields);
 
 function submitForm() {
-  if (validateForm()) {
+  const validate = store.validateForm(form.value);
+  if (validate) {
     console.log("✅ Submitted:", form);
     emit("submit");
     closeModal();
@@ -139,30 +103,7 @@ const closeModal = () => {
   emit("close");
 };
 
-const errors = ref<FormData>({
-  name: "",
-  quantity: "",
-  date: "",
-});
-
-function validateForm() {
-  console.log("run this");
-  errors.value = {};
-
-  if (!form.name.trim()) {
-    errors.value.name = "Item name is required.";
-  }
-
-  if (!form.quantity || Number(form.quantity) <= 0) {
-    errors.value.quantity = "Quantity must be greater than 0.";
-  }
-
-  if (!form.date) {
-    errors.value.date = "Date is required.";
-  }
-
-  return Object.keys(errors.value).length === 0;
-}
+const errors = computed(() => store.errors);
 </script>
 
 <style scoped>

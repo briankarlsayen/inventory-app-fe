@@ -9,6 +9,7 @@ import Stocks from "./pages/Stocks.vue";
 import StockItems from "./pages/StockItems.vue";
 import Sales from "./pages/Sales.vue";
 import SaleItems from "./pages/SaleItems.vue";
+import { createPinia } from "pinia";
 
 const routes = [
   {
@@ -39,5 +40,6 @@ const router = createRouter({
   },
 });
 const app = createApp(App);
+app.use(createPinia());
 app.use(router);
 app.mount("#app");

@@ -13,23 +13,63 @@
   </div>
 </template>
 
-<script>
-import { ref, computed, defineComponent, onMounted } from "vue";
+<script lang="tsx">
+import { ref, defineComponent, onMounted } from "vue";
 import BaseTable from "../components/BaseTable.vue";
 import { getStocksApi } from "../api/api";
 import { utcToLocaleDate } from "../utlis";
+import type { TableHeader } from "../components/BaseTable.vue";
+import { useTableStore } from "../stores/tableStore";
 export default defineComponent({
   name: "Stocks",
   components: {
     BaseTable,
   },
   setup() {
-    const tableHeaders = [
-      { key: "name", label: "Name" },
-      { key: "quantity", label: "Quantity" },
-      { key: "date", label: "Date" },
-      { key: "type", label: "Type" },
+    const today = new Date().toISOString().slice(0, 10);
+    const tableHeaders: TableHeader[] = [
+      {
+        key: "name",
+        label: "Name",
+        inputType: "text",
+        default: "",
+        rules: [{ required: true, message: "Name is required" }],
+      },
+      {
+        key: "quantity",
+        label: "Quantity",
+        inputType: "text",
+        default: "",
+        rules: [
+          { required: true, message: "Quantity is required" },
+          {
+            validator: (value: string) => Number(value) > 0,
+            message: "Quantity must be greater than 0",
+          },
+        ],
+      },
+      {
+        key: "date",
+        label: "Date",
+        inputType: "text",
+        default: today,
+        rules: [{ required: true, message: "Date is required" }],
+      },
+      {
+        key: "type",
+        label: "Type",
+        inputType: "text",
+        default: "",
+        rules: [{ required: true, message: "Type is required" }],
+      },
     ];
+
+    const store = useTableStore();
+    const initialFormDetails = Object.fromEntries(
+      tableHeaders?.map(({ key, default: defaultValue }) => [key, defaultValue])
+    );
+    store.setInitialFormData(initialFormDetails);
+    store.setInputFields(tableHeaders);
 
     const tableData = ref([]);
 
@@ -45,7 +85,6 @@ export default defineComponent({
         };
       });
       tableData.value = formattedData;
-      console.log("res", res);
     });
 
     const handleRowClick = (row) => {

@@ -23,7 +23,10 @@ TODOS
 --- [ ] user details
 --- [ ] stocks
 ----- [x] display stocks
------ [ ] revise table form submission
+----- [x] revise table form submission
+----- [ ] create stocks
+----- [ ] update stocks
+----- [ ] delete stocks
 --- [ ] stock items
 ----- [x] display items
 ----- [ ] create items
