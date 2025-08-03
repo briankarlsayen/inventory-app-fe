@@ -27,35 +27,35 @@
       <p
         class="nav-item"
         :class="{ 'bg-blue-400': route.path === '/' }"
-        @click="handleChangePage('/')"
+        @click="handleChangePage('/app')"
       >
         Dashboard
       </p>
       <p
         class="nav-item"
         :class="{ 'bg-blue-400': route.path === '/stocks' }"
-        @click="handleChangePage('/stocks')"
+        @click="handleChangePage('/app/stocks')"
       >
         Stocks
       </p>
       <p
         class="nav-item"
         :class="{ 'bg-blue-400': route.path === '/stock-items' }"
-        @click="handleChangePage('/stock-items')"
+        @click="handleChangePage('/app/stock-items')"
       >
         Stock Items
       </p>
       <p
         class="nav-item"
         :class="{ 'bg-blue-400': route.path === '/sales' }"
-        @click="handleChangePage('/sales')"
+        @click="handleChangePage('/app/sales')"
       >
         Sales
       </p>
       <p
         class="nav-item"
         :class="{ 'bg-blue-400': route.path === '/sale-items' }"
-        @click="handleChangePage('/sale-items')"
+        @click="handleChangePage('/app/sale-items')"
       >
         Sale Items
       </p>

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="tsx">
-import { ref, defineComponent, onMounted } from "vue";
+import { ref, defineComponent, onMounted, computed } from "vue";
 import BaseTable from "../components/BaseTable.vue";
 import { getStocksApi } from "../api/api";
 import { utcToLocaleDate } from "../utlis";
@@ -26,14 +26,26 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
+    const store = useTableStore();
+
     const today = new Date().toISOString().slice(0, 10);
+    const stockItems = computed(() => store.stockItems);
     const tableHeaders: TableHeader[] = [
+      {
+        key: "item",
+        label: "Item",
+        inputType: "select",
+        default: "",
+        disabled: false,
+        options: stockItems.value ?? [],
+        rules: [{ required: true, message: "Item is required" }],
+      },
       {
         key: "name",
         label: "Name",
         inputType: "text",
         default: "",
-        rules: [{ required: true, message: "Name is required" }],
+        disabled: true,
       },
       {
         key: "quantity",
@@ -64,7 +76,6 @@ export default defineComponent({
       },
     ];
 
-    const store = useTableStore();
     const initialFormDetails = Object.fromEntries(
       tableHeaders?.map(({ key, default: defaultValue }) => [key, defaultValue])
     );
@@ -91,14 +102,16 @@ export default defineComponent({
       console.log("Row clicked:", row);
     };
 
-    const handleAddStocks = () => {
+    const handleAddStocks = async (data: any) => {
       // TODO run add stock api
-      console.log("add stonks");
+      console.log("add stonks", data.value);
+      // const res = await
+      // refresh table data
     };
 
-    const handleEditStocks = () => {
+    const handleEditStocks = (data: any) => {
       // TODO run edit stock api
-      console.log("edit stonks");
+      console.log("edit stonks", data);
     };
 
     const handleDeleteStocks = () => {

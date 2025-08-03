@@ -35,3 +35,6 @@ TODOS
 --- [ ] sales
 --- [ ] sale items
 --- [ ] dashboard
+
+others
+investigate on new pattern for tableHeader, does not follow the single function intended

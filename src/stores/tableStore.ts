@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
+import type { TableHeader } from "../components/BaseTable.vue";
+import { getItemCategoriesApi, getStockItemsApi } from "../api/api";
 
-interface IInputField {
+export interface IInputField {
   key: string;
   label: string;
   inputType: "text" | "autocomplete" | "date" | "number";
@@ -34,17 +36,31 @@ const handleValidation = ({ formData, form }) => {
   };
 };
 
-export const useTableStore = defineStore("exercises", {
+export const useTableStore = defineStore("table", {
   state: () => ({
     formData: {} as any,
     formValidation: {},
-    inputFields: [] as IInputField[],
+    inputFields: [] as TableHeader[],
     formType: "add" as FormType,
     initialFormData: {},
     tableHeader: [] as any[],
     errors: {},
+    categories: [] as any[],
+    stockItems: [] as any[],
   }),
   actions: {
+    async initializeCategories() {
+      console.log("running...");
+      const res = await getItemCategoriesApi();
+      console.log("res", res);
+      if (!res.success) return;
+      this.categories = res.data;
+    },
+    async initializeStockItems() {
+      const res = await getStockItemsApi();
+      if (!res.success) return;
+      this.stockItems = res.data;
+    },
     setTableHeader(props: any) {
       this.tableHeader = props;
     },

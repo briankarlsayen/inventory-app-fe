@@ -46,3 +46,24 @@ export const getStockItemsApi = async (): Promise<IDefaultGetApiResponse> => {
       return { ...data, success };
     });
 };
+
+export const getItemCategoriesApi =
+  async (): Promise<IDefaultGetApiResponse> => {
+    return await routeGetApi({ apiRoute: "/category/" })
+      .then(({ data, success }) => {
+        return { data, success };
+      })
+      .catch(({ data, success }) => {
+        return { ...data, success };
+      });
+  };
+
+export const createStockItemApi = async (): Promise<IDefaultGetApiResponse> => {
+  return await routeGetApi({ apiRoute: "/item/" })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};

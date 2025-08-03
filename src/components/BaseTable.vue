@@ -109,10 +109,11 @@ import { useTableStore } from "../stores/tableStore";
 export interface TableHeader {
   key: string;
   label: string;
-  inputType?: "text" | "autocomplete" | "date" | "number";
+  inputType?: "text" | "autocomplete" | "date" | "number" | "select";
   disabled?: boolean;
   default?: string | number;
   rules?: any[];
+  options?: any[];
 }
 
 const props = defineProps<{
@@ -135,6 +136,7 @@ const currentPage = ref(1);
 const isOpen = ref(false);
 
 const store = useTableStore();
+const formData = computed(() => store.formData);
 
 const totalPages = computed(() => {
   return Math.ceil(props.rows.length / props.perPage);
@@ -177,9 +179,9 @@ const handleOpenEditForm = (item: any) => {
 
 const handleSubmit = () => {
   if (modalTitle.value === "Add") {
-    emit("add-request", "data");
+    emit("add-request", formData);
   } else {
-    emit("edit-request", "data");
+    emit("edit-request", formData);
   }
 };
 

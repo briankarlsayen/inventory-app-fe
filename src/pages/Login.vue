@@ -67,7 +67,7 @@ const handleLogin = async () => {
   if (login?.success) {
     localStorage.setItem("access", login?.access);
     localStorage.setItem("refresh", login?.refresh);
-    return router.push("/");
+    return router.push("/app");
   }
   isLoading.value = false;
   errorMsg.value = login?.error;

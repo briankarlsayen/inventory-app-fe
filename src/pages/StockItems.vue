@@ -10,7 +10,7 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import BaseTable, { type TableHeader } from "../components/BaseTable.vue";
 import { getStockItemsApi } from "../api/api";
 import { useTableStore } from "../stores/tableStore";
@@ -60,7 +60,8 @@ const initialFormDetails = Object.fromEntries(
 
 store.setInitialFormData(initialFormDetails);
 store.setInputFields(tableHeaders);
-
+const categories = computed(() => store.categories);
+console.log("categories", categories.value);
 const tableData = ref([]);
 
 onMounted(async () => {
@@ -82,5 +83,7 @@ onMounted(async () => {
 const handleRowClick = (row) => {
   console.log("Row clicked:", row);
 };
+
+const handleAddItems = async (data: any) => {};
 </script>
 <style scoped></style>

@@ -20,7 +20,7 @@
 
         <form @submit.prevent="submitForm">
           <!-- Item Name -->
-          <div v-for="item in sampleFormDetails" :key="item.key" class="mb-4">
+          <div v-for="item in activeFields" :key="item.key" class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">{{
               item.label
             }}</label>
@@ -31,6 +31,30 @@
               class="w-full border rounded px-3 py-2"
               :class="{ 'border-red-500': errors[item.key] }"
             />
+            <!-- <input
+              v-if="item.inputType === 'select'"
+              v-model="form[item.key]"
+              type="text"
+              class="w-full border rounded px-3 py-2"
+              :class="{ 'border-red-500': errors[item.key] }"
+            /> -->
+            <select
+              id="item"
+              v-if="item.inputType === 'select'"
+              v-model="form[item.key]"
+              type="text"
+              class="w-full border rounded px-3 py-2"
+              :class="{ 'border-red-500': errors[item.key] }"
+            >
+              <!-- inline object literal -->
+              <option
+                v-for="option in item.options"
+                :key="option.id"
+                :value="option.id"
+              >
+                {{ option.name }}
+              </option>
+            </select>
             <input
               v-if="item.inputType === 'number'"
               v-model="form[item.key]"
@@ -86,7 +110,11 @@ const emit = defineEmits(["close", "submit"]);
 
 const store = useTableStore();
 const form = computed(() => store.formData);
-const sampleFormDetails = computed(() => store.inputFields);
+const inputFields = computed(() => store.inputFields);
+const activeFields = computed(() =>
+  inputFields.value.filter((item) => !item.disabled)
+);
+console.log("form", activeFields.value);
 
 function submitForm() {
   const validate = store.validateForm(form.value);
