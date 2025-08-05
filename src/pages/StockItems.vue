@@ -2,20 +2,48 @@
   <div class="p-4">
     <h4 class="pt-8 pb-4">Stock Items</h4>
     <BaseTable
-      :headers="tableHeaders"
+      :headers="headers"
       :rows="tableData"
       :perPage="10"
-      @row-click="handleRowClick"
+      @add-request="handleAdd"
+      @edit-request="handleEdit"
+      @delete-request="handleDelete"
     />
   </div>
 </template>
 <script setup lang="tsx">
-import { computed, onMounted, ref } from "vue";
-import BaseTable, { type TableHeader } from "../components/BaseTable.vue";
-import { getStockItemsApi } from "../api/api";
-import { useTableStore } from "../stores/tableStore";
+import { computed } from "vue";
+import { useTableStore, type TableFormFields } from "../stores/tableStore";
+import BaseTable from "../components/BaseTable.vue";
+import {
+  archiveStockItemApi,
+  createStockItemApi,
+  updateStockItemApi,
+} from "../api/api";
 
-const tableHeaders: TableHeader[] = [
+const store = useTableStore();
+const categories = computed(() => store.categories);
+
+const headers = [
+  {
+    key: "name",
+    label: "Name",
+  },
+  {
+    key: "unit",
+    label: "Unit",
+  },
+  {
+    key: "category",
+    label: "Category",
+  },
+  {
+    key: "reorderLevel",
+    label: "Reorder Level",
+  },
+];
+
+const tableFormFields: TableFormFields[] = [
   {
     key: "name",
     label: "Name",
@@ -34,7 +62,8 @@ const tableHeaders: TableHeader[] = [
     key: "category",
     label: "Category",
     default: "",
-    inputType: "text",
+    inputType: "select",
+    options: categories?.value ?? [],
     rules: [{ required: true, message: "Category is required" }],
   },
   {
@@ -52,38 +81,46 @@ const tableHeaders: TableHeader[] = [
   },
 ];
 
-const store = useTableStore();
-
 const initialFormDetails = Object.fromEntries(
-  tableHeaders?.map(({ key, default: defaultValue }) => [key, defaultValue])
+  tableFormFields?.map(({ key, default: defaultValue }) => [key, defaultValue])
 );
 
 store.setInitialFormData(initialFormDetails);
-store.setInputFields(tableHeaders);
-const categories = computed(() => store.categories);
-console.log("categories", categories.value);
-const tableData = ref([]);
+store.setInputFields(tableFormFields);
 
-onMounted(async () => {
-  const res = await getStockItemsApi();
+const tableData = computed(() => store.stockItems);
+
+const handleAdd = async (data: any) => {
+  const val = data?.value;
+  const formVal = {
+    name: val?.name,
+    unit: val?.unit,
+    reorder_level: val?.reorderLevel,
+    category: val?.category?.id,
+  };
+  const res = await createStockItemApi(formVal);
   if (res?.success) {
-    const formatData = res?.data.map((item) => {
-      return {
-        id: item?.id,
-        name: item?.name,
-        reorderLevel: item?.reorder_level,
-        category: item?.category_details?.name,
-        unit: item?.unit,
-      };
-    });
-    tableData.value = formatData;
+    store.initializeStockItems();
   }
-});
-
-const handleRowClick = (row) => {
-  console.log("Row clicked:", row);
 };
-
-const handleAddItems = async (data: any) => {};
+const handleEdit = async (data: any) => {
+  const val = data?.value;
+  const formVal = {
+    id: val?.id,
+    name: val?.name,
+    unit: val?.unit,
+    reorder_level: val?.reorderLevel,
+    category: val?.category?.id,
+  };
+  const res = await updateStockItemApi(formVal);
+  if (res?.success) {
+    store.initializeStockItems();
+  }
+};
+const handleDelete = async (id: string) => {
+  const res = await archiveStockItemApi(id);
+  if (res?.success) {
+    store.initializeStockItems();
+  }
+};
 </script>
-<style scoped></style>

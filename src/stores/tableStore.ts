@@ -1,6 +1,31 @@
 import { defineStore } from "pinia";
-import type { TableHeader } from "../components/BaseTable.vue";
-import { getItemCategoriesApi, getStockItemsApi } from "../api/api";
+import {
+  getItemCategoriesApi,
+  getStockItemsApi,
+  getStocksApi,
+} from "../api/api";
+import { utcToLocaleDate } from "../utlis";
+
+interface OptionObj {
+  id: string;
+  name: string;
+}
+
+export interface TableFormFields {
+  key: string;
+  label: string;
+  inputType?:
+    | "text"
+    | "autocomplete"
+    | "date"
+    | "number"
+    | "select" // options = {id: string, name: string}[]
+    | "select-str"; // options = string[];
+  disabled?: boolean;
+  default?: string | number;
+  rules?: any[];
+  options?: OptionObj[] | string[];
+}
 
 export interface IInputField {
   key: string;
@@ -40,26 +65,49 @@ export const useTableStore = defineStore("table", {
   state: () => ({
     formData: {} as any,
     formValidation: {},
-    inputFields: [] as TableHeader[],
+    inputFields: [] as TableFormFields[],
     formType: "add" as FormType,
     initialFormData: {},
     tableHeader: [] as any[],
     errors: {},
     categories: [] as any[],
     stockItems: [] as any[],
+    stocks: [] as any[],
   }),
   actions: {
-    async initializeCategories() {
-      console.log("running...");
-      const res = await getItemCategoriesApi();
-      console.log("res", res);
-      if (!res.success) return;
-      this.categories = res.data;
+    async fetchStocks() {
+      const res = await getStocksApi();
+      const formattedData = res?.data.map((item) => {
+        return {
+          id: item?.id,
+          item: {
+            name: item?.item_details.name,
+            id: item?.item_details.id,
+          },
+          quantity: item?.quantity,
+          date: utcToLocaleDate(item?.date),
+          type: item?.type,
+        };
+      });
+      this.stocks = formattedData;
     },
     async initializeStockItems() {
       const res = await getStockItemsApi();
+      const formatData = res?.data.map((item) => {
+        return {
+          id: item?.id,
+          name: item?.name,
+          reorderLevel: item?.reorder_level,
+          category: item?.category_details,
+          unit: item?.unit,
+        };
+      });
+      this.stockItems = formatData;
+    },
+    async initializeCategories() {
+      const res = await getItemCategoriesApi();
       if (!res.success) return;
-      this.stockItems = res.data;
+      this.categories = res.data;
     },
     setTableHeader(props: any) {
       this.tableHeader = props;

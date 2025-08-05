@@ -31,13 +31,6 @@
               class="w-full border rounded px-3 py-2"
               :class="{ 'border-red-500': errors[item.key] }"
             />
-            <!-- <input
-              v-if="item.inputType === 'select'"
-              v-model="form[item.key]"
-              type="text"
-              class="w-full border rounded px-3 py-2"
-              :class="{ 'border-red-500': errors[item.key] }"
-            /> -->
             <select
               id="item"
               v-if="item.inputType === 'select'"
@@ -46,13 +39,16 @@
               class="w-full border rounded px-3 py-2"
               :class="{ 'border-red-500': errors[item.key] }"
             >
-              <!-- inline object literal -->
               <option
                 v-for="option in item.options"
-                :key="option.id"
-                :value="option.id"
+                :key="typeof option === 'string' ? option : option.id"
+                :value="
+                  typeof option === 'string'
+                    ? option
+                    : { id: option?.id, name: option?.name }
+                "
               >
-                {{ option.name }}
+                {{ typeof option === "string" ? option : option.name }}
               </option>
             </select>
             <input

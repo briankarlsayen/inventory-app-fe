@@ -40,7 +40,11 @@
               :key="colIndex"
               class="px-4 py-2 text-sm text-gray-700"
             >
-              {{ row[header.key] }}
+              {{
+                typeof row[header.key] === "object" && row[header.key] !== null
+                  ? row[header.key].name
+                  : row[header.key]
+              }}
             </td>
             <td class="px-4 py-2 text-sm text-gray-700 flex gap-1">
               <SquarePen
@@ -54,7 +58,12 @@
                 class="hover:bg-gray-100 p-2 rounded-md"
                 color="#a51d2d"
                 :size="36"
-                @click="showDialog = true"
+                @click="
+                  () => {
+                    refId = row.id;
+                    showDialog = true;
+                  }
+                "
               />
             </td>
           </tr>
@@ -88,13 +97,12 @@
       @close="isOpen = false"
       @submit="handleSubmit"
     />
-
     <ConfirmDialog
       :show="showDialog"
       title="Delete Item"
       message="Are you sure you want to delete this item? This cannot be undone."
       @cancel="showDialog = false"
-      @confirm="handleDelete"
+      @confirm="handleDelete()"
     />
   </div>
 </template>
@@ -106,18 +114,13 @@ import { SquarePen, Trash } from "lucide-vue-next";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import { useTableStore } from "../stores/tableStore";
 
-export interface TableHeader {
+interface BasicHeader {
   key: string;
   label: string;
-  inputType?: "text" | "autocomplete" | "date" | "number" | "select";
-  disabled?: boolean;
-  default?: string | number;
-  rules?: any[];
-  options?: any[];
 }
 
 const props = defineProps<{
-  headers: TableHeader[];
+  headers: BasicHeader[];
   rows: any[];
   perPage: number;
 }>();
@@ -131,9 +134,11 @@ const emit = defineEmits([
   "edit-request",
   "delete-request",
 ]);
+console.log("rows", props.rows);
 
 const currentPage = ref(1);
 const isOpen = ref(false);
+const refId = ref(0);
 
 const store = useTableStore();
 const formData = computed(() => store.formData);
@@ -174,7 +179,10 @@ const handleFilterClick = () => {
 const handleOpenEditForm = (item: any) => {
   isOpen.value = true;
   modalTitle.value = "Edit";
-  store.editFields(item);
+  console.log("item", item);
+  const formItem = { ...item };
+  console.log("formItem", formItem);
+  store.editFields(formItem);
 };
 
 const handleSubmit = () => {
@@ -186,7 +194,9 @@ const handleSubmit = () => {
 };
 
 function handleDelete() {
-  emit("delete-request", "data");
+  if (!!refId.value) {
+    emit("delete-request", refId.value);
+  }
   showDialog.value = false;
 }
 </script>

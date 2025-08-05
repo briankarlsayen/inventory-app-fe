@@ -60,11 +60,12 @@ const fetchInitialData = async () => {
 
   await store.initializeCategories();
   await store.initializeStockItems();
+  await store.fetchStocks();
 };
 
 let initialized = false;
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const auth = isAuthenticated();
 
   if (to.meta.requiresAuth && !auth) {
