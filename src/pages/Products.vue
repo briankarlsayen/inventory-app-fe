@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <h4 class="pt-8 pb-4">Stock Items</h4>
+    <h4 class="pt-8 pb-4">Products</h4>
     <BaseTable
       :headers="headers"
       :rows="tableData"
@@ -16,13 +16,12 @@ import { computed } from "vue";
 import { useTableStore, type TableFormFields } from "../stores/tableStore";
 import BaseTable from "../components/BaseTable.vue";
 import {
-  archiveStockItemApi,
-  createStockItemApi,
-  updateStockItemApi,
+  archiveProductApi,
+  createProductApi,
+  updateProductApi,
 } from "../api/api";
 
 const store = useTableStore();
-const categories = computed(() => store.categories);
 
 const headers = [
   {
@@ -30,16 +29,16 @@ const headers = [
     label: "Name",
   },
   {
-    key: "unit",
-    label: "Unit",
+    key: "size",
+    label: "Size",
   },
   {
-    key: "category",
-    label: "Category",
+    key: "price",
+    label: "Price",
   },
   {
-    key: "reorderLevel",
-    label: "Reorder Level",
+    key: "type",
+    label: "Type",
   },
 ];
 
@@ -52,25 +51,39 @@ const tableFormFields: TableFormFields[] = [
     rules: [{ required: true, message: "Name is required" }],
   },
   {
-    key: "unit",
-    label: "Unit",
-    default: "",
-    inputType: "text",
-    rules: [{ required: true, message: "Unit is required" }],
-  },
-  {
-    key: "category",
-    label: "Category",
+    key: "size",
+    label: "Size",
     default: "",
     inputType: "select",
-    options: categories?.value ?? [],
-    rules: [{ required: true, message: "Category is required" }],
+    options: ["", "8oz", "12oz"],
+    rules: [],
   },
   {
-    key: "reorderLevel",
-    label: "Reorder Level",
-    default: "0",
+    key: "price",
+    label: "Price",
+    default: "",
     inputType: "number",
+    rules: [
+      { required: false, message: "Price is required" },
+      {
+        validator: (value: string) => Number(value) > 0,
+        message: "Price must be greater than 0",
+      },
+    ],
+  },
+  {
+    key: "type",
+    label: "Type",
+    default: "",
+    inputType: "select",
+    options: ["pastry", "drink", "others"],
+    rules: [{ required: true, message: "Type is required" }],
+  },
+  {
+    key: "description",
+    label: "Description",
+    default: "",
+    inputType: "text",
     rules: [],
   },
 ];
@@ -82,19 +95,20 @@ const initialFormDetails = Object.fromEntries(
 store.setInitialFormData(initialFormDetails);
 store.setInputFields(tableFormFields);
 
-const tableData = computed(() => store.stockItems);
+const tableData = computed(() => store.products);
 
 const handleAdd = async (data: any) => {
   const val = data?.value;
   const formVal = {
     name: val?.name,
-    unit: val?.unit,
-    reorder_level: val?.reorderLevel,
-    category: val?.category?.id,
+    size: val?.size,
+    price: val?.price,
+    type: val?.type,
+    description: val?.description,
   };
-  const res = await createStockItemApi(formVal);
+  const res = await createProductApi(formVal);
   if (res?.success) {
-    store.initializeStockItems();
+    store.initializeProducts();
   }
 };
 const handleEdit = async (data: any) => {
@@ -102,19 +116,20 @@ const handleEdit = async (data: any) => {
   const formVal = {
     id: val?.id,
     name: val?.name,
-    unit: val?.unit,
-    reorder_level: val?.reorderLevel,
-    category: val?.category?.id,
+    size: val?.size,
+    price: val?.price,
+    type: val?.type,
+    description: val?.description,
   };
-  const res = await updateStockItemApi(formVal);
+  const res = await updateProductApi(formVal);
   if (res?.success) {
-    store.initializeStockItems();
+    store.initializeProducts();
   }
 };
 const handleDelete = async (id: string) => {
-  const res = await archiveStockItemApi(id);
+  const res = await archiveProductApi(id);
   if (res?.success) {
-    store.initializeStockItems();
+    store.initializeProducts();
   }
 };
 </script>

@@ -91,7 +91,15 @@
         </button>
       </div>
     </div>
+    <OrderFormModal
+      v-if="isOrderForm"
+      :title="modalTitle"
+      :show="isOpen"
+      @close="isOpen = false"
+      @submit="handleSubmit"
+    />
     <TableFormModal
+      v-else
       :title="modalTitle"
       :show="isOpen"
       @close="isOpen = false"
@@ -113,6 +121,7 @@ import TableFormModal from "./TableFormModal.vue";
 import { SquarePen, Trash } from "lucide-vue-next";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import { useTableStore } from "../stores/tableStore";
+import OrderFormModal from "./OrderFormModal.vue";
 
 interface BasicHeader {
   key: string;
@@ -123,6 +132,7 @@ const props = defineProps<{
   headers: BasicHeader[];
   rows: any[];
   perPage: number;
+  isOrderForm?: boolean;
 }>();
 
 const modalTitle = ref("Add");
@@ -134,7 +144,6 @@ const emit = defineEmits([
   "edit-request",
   "delete-request",
 ]);
-console.log("rows", props.rows);
 
 const currentPage = ref(1);
 const isOpen = ref(false);
@@ -179,9 +188,7 @@ const handleFilterClick = () => {
 const handleOpenEditForm = (item: any) => {
   isOpen.value = true;
   modalTitle.value = "Edit";
-  console.log("item", item);
   const formItem = { ...item };
-  console.log("formItem", formItem);
   store.editFields(formItem);
 };
 

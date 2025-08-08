@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import {
   getItemCategoriesApi,
+  getOrdersApi,
+  getProductsApi,
   getStockItemsApi,
   getStocksApi,
 } from "../api/api";
@@ -73,6 +75,8 @@ export const useTableStore = defineStore("table", {
     categories: [] as any[],
     stockItems: [] as any[],
     stocks: [] as any[],
+    products: [] as any[],
+    orders: [] as any[],
   }),
   actions: {
     async fetchStocks() {
@@ -108,6 +112,28 @@ export const useTableStore = defineStore("table", {
       const res = await getItemCategoriesApi();
       if (!res.success) return;
       this.categories = res.data;
+    },
+    async initializeProducts() {
+      const res = await getProductsApi();
+      if (!res.success) return;
+      this.products = res.data;
+    },
+    async initializeOrders() {
+      const res = await getOrdersApi();
+      if (!res.success) return;
+      const formatData = res?.data.map((order) => {
+        return {
+          id: order?.id,
+          name: order?.name,
+          paymentType: order?.payment_type,
+          totalAmount: order?.total_amount,
+          date: utcToLocaleDate(order?.date),
+          products: order?.products,
+          discountDetails: order?.dicount_details,
+          adjumentDetails: order?.adjustment_details,
+        };
+      });
+      this.orders = formatData;
     },
     setTableHeader(props: any) {
       this.tableHeader = props;

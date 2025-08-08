@@ -21,20 +21,32 @@ TODOS
 [ ] api integration
 --- [x] login
 --- [ ] user details
---- [ ] stocks
+--- [x] stocks
 ----- [x] display stocks
 ----- [x] revise table form submission
------ [ ] create stocks
------ [ ] update stocks
------ [ ] delete stocks
---- [ ] stock items
+----- [x] create stocks
+----- [x] update stocks
+----- [x] delete stocks
+--- [x] stock items
 ----- [x] display items
------ [ ] create items
------ [ ] update items
------ [ ] delete items
---- [ ] sales
---- [ ] sale items
+----- [x] create items
+----- [x] update items
+----- [x] delete items
+--- [ ] orders
+----- [x] display orders
+----- [x] create orders
+----- [x] update orders
+----- [x] delete orders
+--- [ ] products
+----- [x] display products
+----- [x] create products
+----- [x] update products
+----- [x] delete products
 --- [ ] dashboard
+
+BUG
+[ ] login failed when with access, refresh token
+[ ] deleted selected item on order is lost forever
 
 others
 investigate on new pattern for tableHeader, does not follow the single function intended

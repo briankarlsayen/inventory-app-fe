@@ -30,38 +30,52 @@ export default defineComponent({
         <div class="w-fit flex gap-2 flex-col">
           <p
             class="nav-item"
-            :class="{ 'bg-blue-400': route.path === '/' }"
+            :class="{ 'bg-blue-400': route.path === '/app' }"
             @click="handleChangePage('/app')"
           >
             Dashboard
           </p>
           <p
             class="nav-item"
-            :class="{ 'bg-blue-400': route.path === '/stocks' }"
+            :class="{ 'bg-blue-400': route.path === '/app/stocks' }"
             @click="handleChangePage('/app/stocks')"
           >
             Stocks
           </p>
           <p
             class="nav-item"
-            :class="{ 'bg-blue-400': route.path === '/stock-items' }"
+            :class="{ 'bg-blue-400': route.path === '/app/stock-items' }"
             @click="handleChangePage('/app/stock-items')"
           >
             Stock Items
           </p>
-          <p
+          <!-- <p
             class="nav-item"
-            :class="{ 'bg-blue-400': route.path === '/sales' }"
+            :class="{ 'bg-blue-400': route.path === '/app/sales' }"
             @click="handleChangePage('/app/sales')"
           >
             Sales
           </p>
           <p
             class="nav-item"
-            :class="{ 'bg-blue-400': route.path === '/sale-items' }"
+            :class="{ 'bg-blue-400': route.path === '/app/sale-items' }"
             @click="handleChangePage('/app/sale-items')"
           >
             Sale Items
+          </p> -->
+          <p
+            class="nav-item"
+            :class="{ 'bg-blue-400': route.path === '/app/products' }"
+            @click="handleChangePage('/app/products')"
+          >
+            Products
+          </p>
+          <p
+            class="nav-item"
+            :class="{ 'bg-blue-400': route.path === '/app/orders' }"
+            @click="handleChangePage('/app/orders')"
+          >
+            Orders
           </p>
         </div>
       </div>

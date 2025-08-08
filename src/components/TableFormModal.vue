@@ -110,12 +110,10 @@ const inputFields = computed(() => store.inputFields);
 const activeFields = computed(() =>
   inputFields.value.filter((item) => !item.disabled)
 );
-console.log("form", activeFields.value);
 
 function submitForm() {
   const validate = store.validateForm(form.value);
   if (validate) {
-    console.log("✅ Submitted:", form);
     emit("submit");
     closeModal();
   } else {

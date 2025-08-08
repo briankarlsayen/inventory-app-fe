@@ -24,6 +24,18 @@ interface ICreateStockReq {
   date: string;
 }
 
+interface ICreateProductReq {
+  name: string;
+  description: string;
+  price: number;
+  type: string;
+  size: string;
+}
+
+interface IUpdateProductReq extends ICreateProductReq {
+  id: string;
+}
+
 interface IUpdateStockReq extends ICreateStockReq {
   id: string;
 }
@@ -153,6 +165,68 @@ export const archiveStockApi = async (
   return await routeDeleteApi({
     apiRoute: "/stock/" + id,
   })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};
+
+// PRODUCT APIS
+export const getProductsApi = async (): Promise<IDefaultGetApiResponse> => {
+  return await routeGetApi({ apiRoute: "/product/" })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};
+
+export const createProductApi = async (
+  props: ICreateProductReq
+): Promise<IDefaultGetApiResponse> => {
+  return await routePostApi({ apiRoute: "/product/", params: props })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};
+export const updateProductApi = async (
+  props: IUpdateProductReq
+): Promise<IDefaultGetApiResponse> => {
+  return await routeUpdateApi({
+    apiRoute: "/product/" + props?.id,
+    params: props,
+  })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};
+
+export const archiveProductApi = async (
+  id: string
+): Promise<IDefaultGetApiResponse> => {
+  return await routeDeleteApi({
+    apiRoute: "/product/" + id,
+  })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};
+
+// ORDERS APIS
+export const getOrdersApi = async (): Promise<IDefaultGetApiResponse> => {
+  return await routeGetApi({ apiRoute: "/order/" })
     .then(({ data, success }) => {
       return { data, success };
     })

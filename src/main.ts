@@ -12,6 +12,8 @@ import SaleItems from "./pages/SaleItems.vue";
 import { createPinia } from "pinia";
 import DefaultLayout from "./layout/DefaultLayout.vue";
 import { useTableStore } from "./stores/tableStore";
+import Products from "./pages/Products.vue";
+import Orders from "./pages/Orders.vue";
 
 const routes = [
   {
@@ -33,6 +35,8 @@ const routes = [
       { path: "/app/stock-items", component: StockItems },
       { path: "/app/sales", component: Sales },
       { path: "/app/sale-items", component: SaleItems },
+      { path: "/app/products", component: Products },
+      { path: "/app/orders", component: Orders },
     ],
   },
 ];
@@ -60,6 +64,8 @@ const fetchInitialData = async () => {
 
   await store.initializeCategories();
   await store.initializeStockItems();
+  await store.initializeProducts();
+  await store.initializeOrders();
   await store.fetchStocks();
 };
 

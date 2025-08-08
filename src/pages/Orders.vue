@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <h4 class="pt-8 pb-4">Stock Items</h4>
+    <h4 class="pt-8 pb-4">Orders</h4>
     <BaseTable
       :headers="headers"
       :rows="tableData"
@@ -8,6 +8,7 @@
       @add-request="handleAdd"
       @edit-request="handleEdit"
       @delete-request="handleDelete"
+      :isOrderForm="true"
     />
   </div>
 </template>
@@ -26,20 +27,16 @@ const categories = computed(() => store.categories);
 
 const headers = [
   {
-    key: "name",
-    label: "Name",
+    key: "date",
+    label: "Date",
   },
   {
-    key: "unit",
-    label: "Unit",
+    key: "totalAmount",
+    label: "Total Amount",
   },
   {
-    key: "category",
-    label: "Category",
-  },
-  {
-    key: "reorderLevel",
-    label: "Reorder Level",
+    key: "paymentType",
+    label: "Payment Type",
   },
 ];
 
@@ -82,7 +79,7 @@ const initialFormDetails = Object.fromEntries(
 store.setInitialFormData(initialFormDetails);
 store.setInputFields(tableFormFields);
 
-const tableData = computed(() => store.stockItems);
+const tableData = computed(() => store.orders);
 
 const handleAdd = async (data: any) => {
   const val = data?.value;
