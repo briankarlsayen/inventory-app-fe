@@ -234,3 +234,15 @@ export const getOrdersApi = async (): Promise<IDefaultGetApiResponse> => {
       return { ...data, success };
     });
 };
+
+export const createOrderApi = async (
+  props: ICreateProductReq
+): Promise<IDefaultGetApiResponse> => {
+  return await routePostApi({ apiRoute: "/order/", params: props })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};

@@ -77,6 +77,11 @@ export const useTableStore = defineStore("table", {
     stocks: [] as any[],
     products: [] as any[],
     orders: [] as any[],
+    // orderForm: {
+    //   products: [],
+    //   totalPrice: 0,
+    //   payment:
+    // }
   }),
   actions: {
     async fetchStocks() {

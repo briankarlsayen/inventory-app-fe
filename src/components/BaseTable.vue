@@ -189,6 +189,19 @@ const handleOpenEditForm = (item: any) => {
   isOpen.value = true;
   modalTitle.value = "Edit";
   const formItem = { ...item };
+  let formatProducts = [];
+  if (formItem?.products) {
+    formatProducts = formItem?.products.map((item) => {
+      return {
+        ...item,
+        id: item?.product_details?.id,
+        name: item?.product_details?.name,
+      };
+    });
+  }
+  formItem["products"] = formatProducts;
+  console.log("formatProducts", formatProducts);
+
   store.editFields(formItem);
 };
 

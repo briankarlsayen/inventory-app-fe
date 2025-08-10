@@ -68,7 +68,7 @@ function itemKey(item, index) {
   return item.id ?? index;
 }
 function itemLabel(item) {
-  return item.name;
+  return item?.size ? `${item?.name} ${item?.size}` : item?.name;
 }
 
 // Actions

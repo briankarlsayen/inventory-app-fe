@@ -19,81 +19,91 @@
         <h2 class="text-xl font-semibold mb-4">{{ title }}</h2>
 
         <form>
-          <!-- Item Name -->
-          <!-- <SearchableSelect
-            v-model="selectedId"
-            :options="options"
-            placeholder="Choose an item..."
-          /> -->
-
-          <!-- <SearchableDropdown v-model="selected" :options="options" /> -->
           <MultiSelect
             v-model="selectedList"
             :options="products"
             @select="handleSelectOption"
           />
-          <div class="grid grid-cols-12 gap-2 w-full pt-4">
-            <div></div>
-            <div class="col-span-5">
-              <h4>Item</h4>
-            </div>
-            <div class="col-span-3">
-              <h4>Quantity</h4>
-            </div>
-            <div class="col-span-3">
-              <h4>Amount</h4>
-            </div>
-          </div>
-          <hr />
-          <div
-            v-for="item in formFields"
-            :key="item"
-            class="grid grid-cols-12 gap-4 w-full pt-2 pb-2"
-          >
-            <div>
-              <button
-                type="button"
-                @click="() => removeItem(item)"
-                class="text-blue-500 hover:text-blue-700"
+          <div v-if="selectedList?.length">
+            <!-- product form -->
+            <div class="pb-6">
+              <div class="grid grid-cols-12 gap-2 w-full pb-4">
+                <div></div>
+                <div class="col-span-5">
+                  <span>Item</span>
+                </div>
+                <div class="col-span-3">
+                  <span>Quantity</span>
+                </div>
+                <div class="col-span-3 text-end">
+                  <span>Amount</span>
+                </div>
+              </div>
+              <div
+                v-for="item in selectedProducts.products"
+                :key="item"
+                class="grid grid-cols-12 gap-4 w-full pt-2 items-center pb-2"
               >
-                ×
-              </button>
+                <div>
+                  <button
+                    type="button"
+                    @click="() => removeItem(item)"
+                    class="text-red-500 hover:text-red-700 cursor-pointer"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div class="col-span-5">{{ displayLabel(item?.id) }}</div>
+                <div class="col-span-3">
+                  <input
+                    v-model="item.quantity"
+                    @input="handleInput(item?.id)"
+                    type="number"
+                    class="w-full border rounded px-3 py-2"
+                    :class="{ 'border-red-500': errors[item.key] }"
+                  />
+                </div>
+                <div class="col-span-3 text-end">
+                  {{ item?.purchasePrice }}
+                </div>
+              </div>
             </div>
-            <div class="col-span-5">{{ displayLabel(item?.id) }}</div>
-            <div class="col-span-3">
-              <input
-                v-model="item.quantity"
-                @input="handleInput(item?.id)"
-                type="number"
-                class="w-full border rounded px-3 py-2"
-                :class="{ 'border-red-500': errors[item.key] }"
-              />
-            </div>
-            <div class="col-span-3">
-              {{ item?.purchasePrice }}
+            <hr />
+            <div class="pt-8 flex flex-col gap-2">
+              <div class="grid grid-cols-6">
+                <p class="col-span-4">Date</p>
+                <div class="col-span-2">
+                  <input
+                    v-model="date"
+                    type="date"
+                    class="w-full border rounded px-3 py-2"
+                  />
+                </div>
+              </div>
+              <div class="grid grid-cols-4 pt-4">
+                <p class="col-span-3 items-center">Payment</p>
+                <select
+                  id="item"
+                  v-model="paymentField"
+                  class="w-full border rounded px-3 py-2 col-span-1"
+                >
+                  <option
+                    v-for="option in paymentList"
+                    :key="option"
+                    :value="option"
+                  >
+                    {{ option }}
+                  </option>
+                </select>
+              </div>
+              <div class="grid grid-cols-4 pt-4">
+                <p class="col-span-3">Total</p>
+                <p class="col-span-1 text-end">{{ totalPrice }}</p>
+              </div>
             </div>
           </div>
-          <hr />
-          <div class="grid grid-cols-4 pt-4 pb-4">
-            <h4 class="col-span-3">Total</h4>
-            <p class="col-span-1">12345</p>
-          </div>
-          <div class="grid grid-cols-4 pt-4 pb-4">
-            <p class="col-span-3">Payment</p>
-            <select
-              id="item"
-              v-model="paymentField"
-              type="text"
-              class="w-full border rounded px-3 py-2 col-span-1"
-            >
-              <option
-                v-for="option in paymentList"
-                :key="option"
-                :value="option"
-              >
-                {{ option }}
-              </option>
-            </select>
+          <div v-else class="text-center p-4">
+            <p>Please add items on order form</p>
           </div>
         </form>
 
@@ -133,23 +143,51 @@ defineProps<{
 const emit = defineEmits(["close", "submit"]);
 
 const store = useTableStore();
-const form = computed(() => store.formData);
-const inputFields = computed(() => store.inputFields);
+
 const products = computed(() => store.products);
 
 const selectedList = ref([]);
-const formFields = ref([]);
-const paymentField = ref("gcash");
-const paymentList = ["gcash", "cash"];
+const selectedProducts = computed(() => store?.formData);
+// const selectedProducts = ref([]);
+const totalPrice = computed(() =>
+  selectedProducts.value.products.reduce(
+    (sum, item) => sum + (item.purchasePrice || 0),
+    0
+  )
+);
+const paymentField = ref("cash");
+const paymentList = ["cash", "gcash"];
+console.log("selectedProducts", selectedProducts);
+
+const today = new Date().toISOString().slice(0, 10);
+
+const date = ref(today);
 
 function submitForm() {
-  const validate = store.validateForm(form.value);
-  if (validate) {
-    emit("submit");
-    closeModal();
-  } else {
-    console.log("❌ Validation failed");
-  }
+  const formatProducts = selectedProducts.value.products.map((item) => {
+    return {
+      product: item?.id,
+      quantity: item?.quantity,
+      purchase_price: item?.purchasePrice,
+    };
+  });
+  const submitForm = {
+    products: formatProducts,
+    total_amount: totalPrice?.value,
+    payment_type: paymentField?.value,
+    date: date?.value,
+  };
+  store.formData = submitForm;
+  emit("submit");
+  closeModal();
+
+  // const validate = store.validateForm(form.value);
+  // if (validate) {
+  //   emit("submit");
+  //   closeModal();
+  // } else {
+  //   console.log("❌ Validation failed");
+  // }
 }
 
 const closeModal = () => {
@@ -157,34 +195,46 @@ const closeModal = () => {
 };
 
 const displayLabel = (id: string) => {
-  const data = formFields?.value.find((item) => item.id === id);
+  const data = selectedProducts?.value.products.find((item) => item.id === id);
   return data?.size ? `${data?.name} ${data?.size}` : data?.name;
 };
 
 const handleSelectOption = (props: any) => {
+  console.log("click", selectedProducts.value);
   const form = {
     ...props,
     quantity: 1,
     purchasePrice: props?.price,
   };
-  formFields.value = [...formFields.value, form];
+  store.formData.products = [...selectedProducts.value.products, form];
+  // selectedProducts.value.products
   console.log("select", props);
 };
 
 const handleInput = (id: string) => {
-  const fieldVal = formFields?.value.find((item) => item.id === id);
+  const fieldVal = selectedProducts?.value.products.find(
+    (item) => item.id === id
+  );
   fieldVal["purchasePrice"] = fieldVal?.quantity * fieldVal?.price;
 
-  formFields.value = formFields.value.map((item) =>
+  store.formData.products = selectedProducts.value.products.map((item) =>
     item.id === id ? { ...item, ...fieldVal } : item
   );
+  // selectedProducts.value.products = selectedProducts.value.products.map((item) =>
+  //   item.id === id ? { ...item, ...fieldVal } : item
+  // );
 };
 
 const errors = computed(() => store.errors);
 
 const removeItem = (props) => {
-  formFields.value = formFields.value.filter((item) => item.id !== props?.id);
-  selectedList.value.filter((item) => item !== props?.id);
+  store.formData.products = selectedProducts.value.products.filter(
+    (item) => item.id !== props?.id
+  );
+  // selectedProducts.value.products = selectedProducts.value.products.filter(
+  //   (item) => item.id !== props?.id
+  // );
+  selectedList.value = selectedList.value.filter((item) => item !== props?.id);
   //   console.log("remove", id?.id);
 };
 </script>
