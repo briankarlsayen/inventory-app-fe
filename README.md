@@ -32,12 +32,12 @@ TODOS
 ----- [x] create items
 ----- [x] update items
 ----- [x] delete items
---- [ ] orders
+--- [x] orders
 ----- [x] display orders
 ----- [x] create orders
 ----- [x] update orders
 ----- [x] delete orders
---- [ ] products
+--- [x] products
 ----- [x] display products
 ----- [x] create products
 ----- [x] update products
@@ -45,8 +45,8 @@ TODOS
 --- [ ] dashboard
 
 BUG
-[ ] login failed when with access, refresh token
-[ ] deleted selected item on order is lost forever
+[x] login failed when with access, refresh token
+[x] deleted selected item on order is lost forever
 
-others
-investigate on new pattern for tableHeader, does not follow the single function intended
+ENCHANCEMENT
+[ ] apply adjustment and discount on order page

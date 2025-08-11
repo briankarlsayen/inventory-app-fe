@@ -16,12 +16,7 @@
 import { computed } from "vue";
 import { useTableStore, type TableFormFields } from "../stores/tableStore";
 import BaseTable from "../components/BaseTable.vue";
-import {
-  archiveStockItemApi,
-  createOrderApi,
-  createStockItemApi,
-  updateStockItemApi,
-} from "../api/api";
+import { archiveOrderApi, createOrderApi, updateOrderApi } from "../api/api";
 
 const store = useTableStore();
 const categories = computed(() => store.categories);
@@ -75,7 +70,7 @@ const tableFormFields: TableFormFields[] = [
 
 const initialFormDetails = {
   products: [],
-  payment: "cash",
+  paymentType: "cash",
   totalPayment: 0,
 };
 
@@ -85,7 +80,6 @@ store.setInputFields(tableFormFields);
 const tableData = computed(() => store.orders);
 
 const handleAdd = async (data: any) => {
-  console.log("add moto data", data.value);
   const res = await createOrderApi(data?.value);
   if (res?.success) {
     store.initializeOrders();
@@ -93,25 +87,16 @@ const handleAdd = async (data: any) => {
   return;
 };
 const handleEdit = async (data: any) => {
-  console.log("add moto data", data.value);
-  return;
-  const val = data?.value;
-  const formVal = {
-    id: val?.id,
-    name: val?.name,
-    unit: val?.unit,
-    reorder_level: val?.reorderLevel,
-    category: val?.category?.id,
-  };
-  const res = await updateStockItemApi(formVal);
+  const formVal = data?.value;
+  const res = await updateOrderApi(formVal);
   if (res?.success) {
-    store.initializeStockItems();
+    store.initializeOrders();
   }
 };
 const handleDelete = async (id: string) => {
-  const res = await archiveStockItemApi(id);
+  const res = await archiveOrderApi(id);
   if (res?.success) {
-    store.initializeStockItems();
+    store.initializeOrders();
   }
 };
 </script>

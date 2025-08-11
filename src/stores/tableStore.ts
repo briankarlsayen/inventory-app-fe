@@ -69,7 +69,7 @@ export const useTableStore = defineStore("table", {
     formValidation: {},
     inputFields: [] as TableFormFields[],
     formType: "add" as FormType,
-    initialFormData: {},
+    initialFormData: {} as any,
     tableHeader: [] as any[],
     errors: {},
     categories: [] as any[],
@@ -77,11 +77,7 @@ export const useTableStore = defineStore("table", {
     stocks: [] as any[],
     products: [] as any[],
     orders: [] as any[],
-    // orderForm: {
-    //   products: [],
-    //   totalPrice: 0,
-    //   payment:
-    // }
+    selectProductIds: [] as any,
   }),
   actions: {
     async fetchStocks() {
@@ -133,7 +129,16 @@ export const useTableStore = defineStore("table", {
           paymentType: order?.payment_type,
           totalAmount: order?.total_amount,
           date: utcToLocaleDate(order?.date),
-          products: order?.products,
+          products: order?.products.map((product) => {
+            return {
+              id: product?.product_details?.id,
+              name: product?.product_details?.name,
+              quantity: product.quantity,
+              purchasePrice: product?.purchase_price,
+              price: product?.product_details?.price,
+              size: product?.product_details?.size,
+            };
+          }),
           discountDetails: order?.dicount_details,
           adjumentDetails: order?.adjustment_details,
         };
@@ -153,9 +158,15 @@ export const useTableStore = defineStore("table", {
       this.initialFormData = props;
     },
     addFields() {
+      if (this.initialFormData.products) {
+        this.selectProductIds = this.initialFormData.products?.map((e) => e.id);
+      }
       this.formData = this.initialFormData;
     },
     editFields(props: any) {
+      if (props.products) {
+        this.selectProductIds = props.products?.map((e) => e.id);
+      }
       this.formData = props;
     },
     clearFiels() {

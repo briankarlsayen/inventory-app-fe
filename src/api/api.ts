@@ -246,3 +246,32 @@ export const createOrderApi = async (
       return { ...data, success };
     });
 };
+
+export const updateOrderApi = async (
+  props: IUpdateProductReq
+): Promise<IDefaultGetApiResponse> => {
+  return await routeUpdateApi({
+    apiRoute: "/order/" + props?.id,
+    params: props,
+  })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};
+
+export const archiveOrderApi = async (
+  id: string
+): Promise<IDefaultGetApiResponse> => {
+  return await routeDeleteApi({
+    apiRoute: "/order/" + id,
+  })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};

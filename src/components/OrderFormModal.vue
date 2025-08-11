@@ -146,18 +146,27 @@ const store = useTableStore();
 
 const products = computed(() => store.products);
 
-const selectedList = ref([]);
 const selectedProducts = computed(() => store?.formData);
-// const selectedProducts = ref([]);
+const selectedList = computed({
+  get: () => store.selectProductIds,
+  set: (val) => {
+    store.selectProductIds = val;
+  },
+});
 const totalPrice = computed(() =>
   selectedProducts.value.products.reduce(
     (sum, item) => sum + (item.purchasePrice || 0),
     0
   )
 );
-const paymentField = ref("cash");
+
+const paymentField = computed({
+  get: () => store?.formData?.paymentType,
+  set: (val) => {
+    store.formData.paymentType = val;
+  },
+});
 const paymentList = ["cash", "gcash"];
-console.log("selectedProducts", selectedProducts);
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -172,6 +181,7 @@ function submitForm() {
     };
   });
   const submitForm = {
+    id: selectedProducts?.value?.id,
     products: formatProducts,
     total_amount: totalPrice?.value,
     payment_type: paymentField?.value,
@@ -180,14 +190,6 @@ function submitForm() {
   store.formData = submitForm;
   emit("submit");
   closeModal();
-
-  // const validate = store.validateForm(form.value);
-  // if (validate) {
-  //   emit("submit");
-  //   closeModal();
-  // } else {
-  //   console.log("❌ Validation failed");
-  // }
 }
 
 const closeModal = () => {
@@ -200,15 +202,12 @@ const displayLabel = (id: string) => {
 };
 
 const handleSelectOption = (props: any) => {
-  console.log("click", selectedProducts.value);
   const form = {
     ...props,
     quantity: 1,
     purchasePrice: props?.price,
   };
   store.formData.products = [...selectedProducts.value.products, form];
-  // selectedProducts.value.products
-  console.log("select", props);
 };
 
 const handleInput = (id: string) => {
@@ -220,9 +219,6 @@ const handleInput = (id: string) => {
   store.formData.products = selectedProducts.value.products.map((item) =>
     item.id === id ? { ...item, ...fieldVal } : item
   );
-  // selectedProducts.value.products = selectedProducts.value.products.map((item) =>
-  //   item.id === id ? { ...item, ...fieldVal } : item
-  // );
 };
 
 const errors = computed(() => store.errors);
@@ -231,11 +227,8 @@ const removeItem = (props) => {
   store.formData.products = selectedProducts.value.products.filter(
     (item) => item.id !== props?.id
   );
-  // selectedProducts.value.products = selectedProducts.value.products.filter(
-  //   (item) => item.id !== props?.id
-  // );
+
   selectedList.value = selectedList.value.filter((item) => item !== props?.id);
-  //   console.log("remove", id?.id);
 };
 </script>
 
