@@ -42,7 +42,8 @@ TODOS
 ----- [x] create products
 ----- [x] update products
 ----- [x] delete products
---- [ ] dashboard
+--- [x] dashboard
+[ ] update ts interfaces
 
 BUG
 [x] login failed when with access, refresh token

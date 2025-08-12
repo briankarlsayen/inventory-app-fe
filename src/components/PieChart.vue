@@ -1,22 +1,22 @@
 <template>
   <div class="w-full max-w-[300px]">
+    <!-- @ts-ignore -->
     <Pie :data="chartData" :options="chartOptions" />
   </div>
 </template>
 
 <script setup lang="tsx">
 import { Pie } from "vue-chartjs";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  type ChartOptions,
+} from "chart.js";
 import { computed } from "vue";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-// const props = defineProps({
-//   range: {
-//     type: String,
-//     default: "week",
-//   },
-// });
 
 const props = defineProps<{
   range: string;
@@ -66,12 +66,12 @@ const chartData = computed(() => {
   }
 });
 
-const chartOptions = {
+const chartOptions: ChartOptions<"pie"> = {
   responsive: true,
   plugins: {
-    // legend: {
-    //   position: "bottom",
-    // },
+    legend: {
+      position: "bottom",
+    },
   },
 };
 </script>

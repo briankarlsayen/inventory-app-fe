@@ -13,18 +13,11 @@ import {
   LinearScale,
   Tooltip,
   Legend,
+  type ChartOptions,
 } from "chart.js";
 import { computed } from "vue";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
-
-// const props = defineProps({
-//   range: {
-//     type: String,
-//     default: "week", // week | month | year
-//   },
-//   data: []
-// });
 
 const props = defineProps<{
   range: string;
@@ -73,10 +66,10 @@ const chartData = computed(() => {
   }
 });
 
-const chartOptions = {
+const chartOptions: ChartOptions<"bar"> = {
   responsive: true,
   plugins: {
-    legend: { display: true },
+    legend: { display: true, position: "bottom" },
   },
   scales: {
     y: { beginAtZero: true },
