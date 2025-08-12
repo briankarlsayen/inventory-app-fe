@@ -4,50 +4,62 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="tsx">
 import { Pie } from "vue-chartjs";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { computed } from "vue";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const props = defineProps({
-  range: {
-    type: String,
-    default: "week",
-  },
-});
+// const props = defineProps({
+//   range: {
+//     type: String,
+//     default: "week",
+//   },
+// });
 
-const weekData = {
-  label: ["Espresso", "Latte", "Cappuccino"],
-  data: [35, 45, 20],
-};
+const props = defineProps<{
+  range: string;
+  label: string[];
+  data: number[];
+}>();
 
-const yearData = {
-  label: ["Espresso", "Latte", "Cappuccino", "Spanish Latte"],
-  data: [66, 99, 150, 240],
-};
+const data = computed(() => props.data);
+const label = computed(() => props.label);
+
+const backgroundColor = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#4BC0C0",
+  "#9966FF",
+  "#FF9F40",
+  "#C9CBCF",
+  "#8DD17E",
+  "#E77E23",
+  "#FF6F61",
+];
 
 const chartData = computed(() => {
   if (props.range === "week") {
     return {
-      labels: weekData.label,
+      labels: label.value,
       datasets: [
         {
           label: "Sales Distribution",
-          data: weekData.data,
-          backgroundColor: ["#facc15", "#60a5fa", "#f87171"],
+          data: data.value,
+          backgroundColor,
         },
       ],
     };
   } else {
     return {
-      labels: yearData.label,
+      labels: label?.value,
       datasets: [
         {
           label: "Sales Distribution",
-          data: yearData.data,
-          backgroundColor: ["#facc15", "#60a5fa", "#f87171", "teal"],
+          data: data.value,
+          backgroundColor,
         },
       ],
     };
@@ -57,9 +69,9 @@ const chartData = computed(() => {
 const chartOptions = {
   responsive: true,
   plugins: {
-    legend: {
-      position: "bottom",
-    },
+    // legend: {
+    //   position: "bottom",
+    // },
   },
 };
 </script>

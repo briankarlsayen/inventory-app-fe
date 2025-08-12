@@ -67,6 +67,7 @@ const fetchInitialData = async () => {
   await store.initializeProducts();
   await store.initializeOrders();
   await store.fetchStocks();
+  await store.initializeDashboardDetails();
 };
 
 let initialized = false;

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import {
+  getDashboardApi,
   getItemCategoriesApi,
   getOrdersApi,
   getProductsApi,
@@ -63,6 +64,25 @@ const handleValidation = ({ formData, form }) => {
   };
 };
 
+interface IDashboardDetails {
+  weeklyTopProduct: string;
+  totalSales: number;
+  sales: {
+    week: number[];
+    year: number[];
+  };
+  products: {
+    week: {
+      label: string[];
+      count: number[];
+    };
+    year: {
+      label: string[];
+      count: number[];
+    };
+  };
+}
+
 export const useTableStore = defineStore("table", {
   state: () => ({
     formData: {} as any,
@@ -78,6 +98,24 @@ export const useTableStore = defineStore("table", {
     products: [] as any[],
     orders: [] as any[],
     selectProductIds: [] as any,
+    dashboardDetails: {
+      weeklyTopProduct: "",
+      totalSales: 0,
+      sales: {
+        week: [],
+        year: [],
+      },
+      products: {
+        week: {
+          label: [],
+          count: [],
+        },
+        year: {
+          label: [],
+          count: [],
+        },
+      },
+    } as IDashboardDetails,
   }),
   actions: {
     async fetchStocks() {
@@ -145,6 +183,47 @@ export const useTableStore = defineStore("table", {
       });
       this.orders = formatData;
     },
+    async initializeDashboardDetails() {
+      const res = await getDashboardApi();
+      if (res?.success) {
+        const data = res?.data;
+        const weeklyData = data?.order.week?.map((e) => e.count);
+        const yearlyData = data?.order.year?.map((e) => e.count);
+
+        const productWeeklyData = {
+          label: [],
+          count: [],
+        };
+        data?.top_products?.week.map((e) => {
+          productWeeklyData.label.push(e.name);
+          productWeeklyData.count.push(e.quantity);
+        });
+
+        const productYearlyData = {
+          label: [],
+          count: [],
+        };
+
+        data?.top_products?.year.map((e) => {
+          productYearlyData.label.push(e.name);
+          productYearlyData.count.push(e.quantity);
+        });
+
+        const formatData: IDashboardDetails = {
+          weeklyTopProduct: data?.top_products?.week[0]?.name,
+          totalSales: data?.total_sales,
+          products: {
+            week: productWeeklyData,
+            year: productYearlyData,
+          },
+          sales: {
+            week: weeklyData,
+            year: yearlyData,
+          },
+        };
+        this.dashboardDetails = formatData;
+      }
+    },
     setTableHeader(props: any) {
       this.tableHeader = props;
     },
@@ -174,7 +253,6 @@ export const useTableStore = defineStore("table", {
     },
     validateForm(props: any) {
       const res = handleValidation({ formData: this.inputFields, form: props });
-      console.log("err", res.errors);
       this.errors = res.errors;
       return res.success;
     },

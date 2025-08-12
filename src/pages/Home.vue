@@ -6,17 +6,17 @@
       <div class="dashboard-card">
         <span class="text-xs text-gray-600 uppercase">Total Sales</span>
         <p>
-          {{ totalSales }}
+          {{ data?.totalSales }}
         </p>
       </div>
       <div class="dashboard-card">
-        <span class="text-xs text-gray-600 uppercase">Top Product</span>
-        <p>{{ topProduct }}</p>
+        <span class="text-xs text-gray-600 uppercase">Weekly Top Product</span>
+        <p>{{ data.weeklyTopProduct }}</p>
       </div>
-      <div class="dashboard-card">
+      <!-- <div class="dashboard-card">
         <span class="text-xs text-gray-600 uppercase">Low Stock Count:</span>
         <p>{{ lowStockCount }}</p>
-      </div>
+      </div> -->
     </div>
     <div class="pt-8 flex flex-row items-center gap-4">
       <p>Sales</p>
@@ -30,21 +30,30 @@
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="flex w-full flex-col">
-        <BarChart :range="selectedRange" />
+        <BarChart :data="data.sales[selectedRange]" :range="selectedRange" />
       </div>
       <div class="flex w-full flex-col justify-between">
-        <PieChart :range="selectedRange" />
+        <PieChart
+          :label="data.products[selectedRange].label"
+          :data="data.products[selectedRange].count"
+          :range="selectedRange"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="tsx" setup>
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import BarChart from "../components/BarChart.vue";
 import PieChart from "../components/PieChart.vue";
-const totalSales = 30;
-const topProduct = "Spanish Latte";
-const lowStockCount = 2;
+import { useTableStore } from "../stores/tableStore";
+
+const store = useTableStore();
+
+const data = computed(() => store.dashboardDetails);
 const selectedRange = ref("week");
+onMounted(() => {
+  store.initializeDashboardDetails();
+});
 </script>

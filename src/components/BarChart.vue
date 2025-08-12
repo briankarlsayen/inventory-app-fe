@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="tsx">
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -18,12 +18,20 @@ import { computed } from "vue";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const props = defineProps({
-  range: {
-    type: String,
-    default: "week", // week | month | year
-  },
-});
+// const props = defineProps({
+//   range: {
+//     type: String,
+//     default: "week", // week | month | year
+//   },
+//   data: []
+// });
+
+const props = defineProps<{
+  range: string;
+  data: number[];
+}>();
+
+const data = computed(() => props.data);
 
 // Example mock data switch based on range
 const chartData = computed(() => {
@@ -33,7 +41,7 @@ const chartData = computed(() => {
       datasets: [
         {
           label: "Sales",
-          data: [120, 150, 170, 90, 200],
+          data: data?.value,
           backgroundColor: "#60a5fa",
         },
       ],
@@ -57,7 +65,7 @@ const chartData = computed(() => {
       datasets: [
         {
           label: "Sales",
-          data: [3000, 2800, 4000, 3500, 4200],
+          data: data?.value,
           backgroundColor: "#60a5fa",
         },
       ],

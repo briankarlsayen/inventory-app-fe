@@ -13,7 +13,7 @@ interface ILoginResponse {
 }
 
 interface IDefaultGetApiResponse {
-  data: any[];
+  data: any;
   success: boolean;
 }
 
@@ -268,6 +268,16 @@ export const archiveOrderApi = async (
   return await routeDeleteApi({
     apiRoute: "/order/" + id,
   })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};
+
+export const getDashboardApi = async (): Promise<IDefaultGetApiResponse> => {
+  return await routeGetApi({ apiRoute: "/dashboard/" })
     .then(({ data, success }) => {
       return { data, success };
     })
