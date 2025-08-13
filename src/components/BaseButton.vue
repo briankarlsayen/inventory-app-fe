@@ -1,9 +1,5 @@
 <template>
-  <button
-    :disabled="loading || disabled"
-    :class="computedClass"
-    @click="$emit('click', $event)"
-  >
+  <button :type="type" :disabled="loading || disabled" :class="computedClass">
     <slot />
     <svg
       v-if="loading"
@@ -37,6 +33,7 @@ const props = defineProps<{
   disabled?: boolean;
   variant?: "primary" | "secondary";
   class: string;
+  type?: "button" | "submit" | "reset";
 }>();
 
 const baseClass =

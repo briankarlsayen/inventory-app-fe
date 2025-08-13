@@ -39,6 +39,14 @@ export interface IInputField {
 
 type FormType = "add" | "edit";
 
+interface IProduct {
+  id: string;
+  name: string;
+  price: number;
+  size: string;
+  type: string;
+}
+
 const handleValidation = ({ formData, form }) => {
   const errors = {};
 
@@ -95,7 +103,7 @@ export const useTableStore = defineStore("table", {
     categories: [] as any[],
     stockItems: [] as any[],
     stocks: [] as any[],
-    products: [] as any[],
+    products: [] as IProduct[],
     orders: [] as any[],
     selectProductIds: [] as any,
     dashboardDetails: {
@@ -116,6 +124,8 @@ export const useTableStore = defineStore("table", {
         },
       },
     } as IDashboardDetails,
+    isTableModalLoading: false,
+    isTableModalOpen: false,
   }),
   actions: {
     async fetchStocks() {
@@ -155,6 +165,7 @@ export const useTableStore = defineStore("table", {
     async initializeProducts() {
       const res = await getProductsApi();
       if (!res.success) return;
+      console.log("res", res.data);
       this.products = res.data;
     },
     async initializeOrders() {
@@ -255,6 +266,12 @@ export const useTableStore = defineStore("table", {
       const res = handleValidation({ formData: this.inputFields, form: props });
       this.errors = res.errors;
       return res.success;
+    },
+    setLoadingState(props: boolean) {
+      this.isTableModalLoading = props;
+    },
+    setModalState(props: boolean) {
+      this.isTableModalOpen = props;
     },
   },
 });

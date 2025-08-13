@@ -80,11 +80,12 @@ store.setInputFields(tableFormFields);
 const tableData = computed(() => store.orders);
 
 const handleAdd = async (data: any) => {
+  store.setLoadingState(true);
   const res = await createOrderApi(data?.value);
   if (res?.success) {
     store.initializeOrders();
   }
-  return;
+  // store.setLoadingState(false)
 };
 const handleEdit = async (data: any) => {
   const formVal = data?.value;

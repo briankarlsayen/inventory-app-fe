@@ -74,18 +74,23 @@
         <!-- Footer slot (optional submit buttons) -->
         <div class="mt-4 text-right">
           <slot name="footer">
-            <button
-              @click="$emit('close')"
-              class="px-4 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 mr-2"
-            >
-              Cancel
-            </button>
-            <button
-              @click="submitForm"
-              class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Submit
-            </button>
+            <div class="flex flex-row-reverse gap-2">
+              <BaseButton
+                type="submit"
+                class="btn btn-primary"
+                :loading="isLoading"
+                @click="submitForm"
+              >
+                Submit
+              </BaseButton>
+              <BaseButton
+                :disabled="isLoading"
+                @click="$emit('close')"
+                class="px-4 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </BaseButton>
+            </div>
           </slot>
         </div>
       </div>
@@ -94,8 +99,9 @@
 </template>
 
 <script setup lang="tsx">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useTableStore } from "../stores/tableStore";
+import BaseButton from "./BaseButton.vue";
 
 defineProps<{
   show: Boolean;
@@ -103,8 +109,8 @@ defineProps<{
 }>();
 
 const emit = defineEmits(["close", "submit"]);
-
 const store = useTableStore();
+const isLoading = computed(() => store.isTableModalLoading);
 const form = computed(() => store.formData);
 const inputFields = computed(() => store.inputFields);
 const activeFields = computed(() =>
@@ -115,7 +121,7 @@ function submitForm() {
   const validate = store.validateForm(form.value);
   if (validate) {
     emit("submit");
-    closeModal();
+    // closeModal();
   } else {
     console.log("❌ Validation failed");
   }

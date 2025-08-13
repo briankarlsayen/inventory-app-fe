@@ -6,7 +6,7 @@
       <div class="dashboard-card">
         <span class="text-xs text-gray-600 uppercase">Total Sales</span>
         <p>
-          {{ data?.totalSales }}
+          {{ formatPrice(data?.totalSales) }}
         </p>
       </div>
       <div class="dashboard-card">
@@ -48,6 +48,7 @@ import { computed, onMounted, ref } from "vue";
 import BarChart from "../components/BarChart.vue";
 import PieChart from "../components/PieChart.vue";
 import { useTableStore } from "../stores/tableStore";
+import { formatPrice } from "../utlis";
 
 const store = useTableStore();
 

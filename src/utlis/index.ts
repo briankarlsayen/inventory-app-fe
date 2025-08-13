@@ -14,3 +14,10 @@ export const utcToLocaleDate = (utcDate: string) => {
   console.log("f", formattedDate);
   return formattedDate;
 };
+
+export const formatPrice = (val: number) => {
+  return val.toLocaleString("en-PH", {
+    style: "currency",
+    currency: "PHP",
+  });
+};

@@ -146,10 +146,14 @@ const emit = defineEmits([
 ]);
 
 const currentPage = ref(1);
-const isOpen = ref(false);
 const refId = ref(0);
 
 const store = useTableStore();
+const isOpen = computed({
+  get: () => store.isTableModalOpen,
+  set: (props: boolean) => store.setModalState(props),
+});
+
 const formData = computed(() => store.formData);
 
 const totalPages = computed(() => {
@@ -176,6 +180,7 @@ function prevPage() {
 }
 
 const handleAddClick = () => {
+  store.setModalState(true);
   isOpen.value = true;
   modalTitle.value = "Add";
   store.addFields();

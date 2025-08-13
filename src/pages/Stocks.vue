@@ -96,17 +96,21 @@ export default defineComponent({
 
     const tableData = computed(() => store.stocks);
     const handleAddStocks = async (data: any) => {
+      store.setLoadingState(true);
       const formVal = {
         ...data.value,
         item: data?.value?.item?.id,
       };
       const res = await createStockApi(formVal);
       if (res?.success) {
-        store.fetchStocks();
+        await store.fetchStocks();
       }
+      store.setLoadingState(false);
+      store.setModalState(false);
     };
 
     const handleEditStocks = async (data: any) => {
+      store.setLoadingState(true);
       const formVal = {
         ...data.value,
         item: data?.value?.item?.id,
@@ -115,13 +119,18 @@ export default defineComponent({
       if (res?.success) {
         store.fetchStocks();
       }
+      store.setLoadingState(false);
+      store.setModalState(false);
     };
 
     const handleDeleteStocks = async (id: string) => {
+      store.setLoadingState(true);
       const res = await archiveStockApi(id);
       if (res?.success) {
         store.fetchStocks();
       }
+      store.setLoadingState(false);
+      store.setModalState(false);
     };
 
     return {

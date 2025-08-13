@@ -116,13 +116,22 @@
             >
               Cancel
             </button>
-            <button
+
+            <BaseButton
+              class="btn btn-primary w-full"
+              type="submit"
+              :loading="isLoading"
+              @click="submitForm"
+            >
+              Submit
+            </BaseButton>
+            <!-- <button
               type="submit"
               @click="submitForm"
               class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
             >
               Submit
-            </button>
+            </button> -->
           </slot>
         </div>
       </div>
@@ -134,6 +143,15 @@
 import { computed, ref } from "vue";
 import { useTableStore } from "../stores/tableStore";
 import MultiSelect from "./MultiSelect.vue";
+import BaseButton from "./BaseButton.vue";
+
+interface ISelectedProduct {
+  id?: string;
+  date: string;
+  paymentType: "cash" | "gcash";
+  products: any[];
+  totalAmount: number;
+}
 
 defineProps<{
   show: Boolean;
@@ -145,8 +163,9 @@ const emit = defineEmits(["close", "submit"]);
 const store = useTableStore();
 
 const products = computed(() => store.products);
+const isLoading = ref(false);
 
-const selectedProducts = computed(() => store?.formData);
+const selectedProducts = computed<ISelectedProduct>(() => store?.formData);
 const selectedList = computed({
   get: () => store.selectProductIds,
   set: (val) => {
@@ -223,7 +242,7 @@ const handleInput = (id: string) => {
 
 const errors = computed(() => store.errors);
 
-const removeItem = (props) => {
+const removeItem = (props: ISelectedProduct) => {
   store.formData.products = selectedProducts.value.products.filter(
     (item) => item.id !== props?.id
   );
