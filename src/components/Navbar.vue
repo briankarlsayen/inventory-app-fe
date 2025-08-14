@@ -47,17 +47,17 @@
       </p>
       <p
         class="nav-item"
-        :class="{ 'bg-blue-400': route.path === '/sales' }"
-        @click="handleChangePage('/app/sales')"
+        :class="{ 'bg-blue-400': route.path === '/products' }"
+        @click="handleChangePage('/app/products')"
       >
-        Sales
+        Products
       </p>
       <p
         class="nav-item"
-        :class="{ 'bg-blue-400': route.path === '/sale-items' }"
-        @click="handleChangePage('/app/sale-items')"
+        :class="{ 'bg-blue-400': route.path === '/orders' }"
+        @click="handleChangePage('/app/orders')"
       >
-        Sale Items
+        Orders
       </p>
     </div>
   </div>
@@ -75,7 +75,7 @@ const currRoute = ref(route.path);
 
 const handleChangePage = (url: string) => {
   currRoute.value = route.path;
-  console.log("currRoute", currRoute.value);
   router.push(url);
+  isOpen.value = false;
 };
 </script>

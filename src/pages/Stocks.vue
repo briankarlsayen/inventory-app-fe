@@ -105,6 +105,7 @@ export default defineComponent({
       if (res?.success) {
         await store.fetchStocks();
       }
+      store.clearFields();
       store.setLoadingState(false);
       store.setModalState(false);
     };
@@ -119,6 +120,7 @@ export default defineComponent({
       if (res?.success) {
         store.fetchStocks();
       }
+      store.clearFields();
       store.setLoadingState(false);
       store.setModalState(false);
     };

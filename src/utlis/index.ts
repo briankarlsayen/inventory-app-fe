@@ -11,7 +11,6 @@ export const utcToLocaleDate = (utcDate: string) => {
 
   // Using the 'en-CA' locale returns the date in ISO format (YYYY-MM-DD)
   const formattedDate = date.toLocaleDateString("en-CA", options);
-  console.log("f", formattedDate);
   return formattedDate;
 };
 

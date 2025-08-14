@@ -165,7 +165,6 @@ export const useTableStore = defineStore("table", {
     async initializeProducts() {
       const res = await getProductsApi();
       if (!res.success) return;
-      console.log("res", res.data);
       this.products = res.data;
     },
     async initializeOrders() {
@@ -251,7 +250,7 @@ export const useTableStore = defineStore("table", {
       if (this.initialFormData.products) {
         this.selectProductIds = this.initialFormData.products?.map((e) => e.id);
       }
-      this.formData = this.initialFormData;
+      this.formData = { ...this.initialFormData };
     },
     editFields(props: any) {
       if (props.products) {
@@ -259,8 +258,8 @@ export const useTableStore = defineStore("table", {
       }
       this.formData = props;
     },
-    clearFiels() {
-      // this.formData
+    clearFields() {
+      this.formData = { ...this.initialFormData };
     },
     validateForm(props: any) {
       const res = handleValidation({ formData: this.inputFields, form: props });

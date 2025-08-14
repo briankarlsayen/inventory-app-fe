@@ -85,6 +85,7 @@ store.setInputFields(tableFormFields);
 const tableData = computed(() => store.stockItems);
 
 const handleAdd = async (data: any) => {
+  store.setLoadingState(true);
   const val = data?.value;
   const formVal = {
     name: val?.name,
@@ -96,8 +97,11 @@ const handleAdd = async (data: any) => {
   if (res?.success) {
     store.initializeStockItems();
   }
+  store.setLoadingState(false);
+  store.setModalState(false);
 };
 const handleEdit = async (data: any) => {
+  store.setLoadingState(true);
   const val = data?.value;
   const formVal = {
     id: val?.id,
@@ -110,11 +114,16 @@ const handleEdit = async (data: any) => {
   if (res?.success) {
     store.initializeStockItems();
   }
+  store.setLoadingState(false);
+  store.setModalState(false);
 };
 const handleDelete = async (id: string) => {
+  store.setLoadingState(true);
   const res = await archiveStockItemApi(id);
   if (res?.success) {
     store.initializeStockItems();
   }
+  store.setLoadingState(false);
+  store.setModalState(false);
 };
 </script>

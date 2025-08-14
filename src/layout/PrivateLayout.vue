@@ -1,11 +1,10 @@
 <script lang="ts">
-import { defineComponent, onBeforeMount, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
 import ConfirmDialog from "../components/ConfirmDialog.vue";
 import { useRouter } from "vue-router";
 import { proccessLogout } from "../utlis";
-import { useTableStore } from "../stores/tableStore";
 export default defineComponent({
   name: "PrivateLayout",
   components: {
@@ -22,14 +21,6 @@ export default defineComponent({
       router.push("/login");
     };
 
-    // const store = useTableStore();
-
-    // onBeforeMount(async () => {
-    //   console.log("before mount");
-    //   await store.initializeCategories();
-    //   console.log("after before");
-    // });
-
     return {
       showDialog,
       handleLogout,
@@ -45,7 +36,6 @@ export default defineComponent({
     </div>
     <div class="md:hidden block">
       <Navbar @click-logout="showDialog = true" />
-      <!-- <p>Navbar</p> -->
     </div>
     <ConfirmDialog
       :show="showDialog"
@@ -62,7 +52,6 @@ export default defineComponent({
 
 <style scoped>
 nav {
-  /* padding: 1rem; */
   padding-left: 1rem;
   padding-right: 1rem;
   background-color: #2a5ba6;

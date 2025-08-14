@@ -35,7 +35,6 @@
               id="item"
               v-if="item.inputType === 'select'"
               v-model="form[item.key]"
-              type="text"
               class="w-full border rounded px-3 py-2"
               :class="{ 'border-red-500': errors[item.key] }"
             >
@@ -99,7 +98,7 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useTableStore } from "../stores/tableStore";
 import BaseButton from "./BaseButton.vue";
 
@@ -121,15 +120,10 @@ function submitForm() {
   const validate = store.validateForm(form.value);
   if (validate) {
     emit("submit");
-    // closeModal();
   } else {
     console.log("❌ Validation failed");
   }
 }
-
-const closeModal = () => {
-  emit("close");
-};
 
 const errors = computed(() => store.errors);
 </script>

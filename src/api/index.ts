@@ -36,7 +36,6 @@ export const routePostApi = async ({
       headers,
     });
     const { status, data, statusText } = response;
-    console.log("status", status);
     return { status, data, statusText, success: true };
   } catch (error: any) {
     const { status, data, statusText } = error?.response ?? "";

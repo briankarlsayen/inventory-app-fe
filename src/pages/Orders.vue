@@ -85,19 +85,26 @@ const handleAdd = async (data: any) => {
   if (res?.success) {
     store.initializeOrders();
   }
-  // store.setLoadingState(false)
+  store.setLoadingState(false);
+  store.setModalState(false);
 };
 const handleEdit = async (data: any) => {
+  store.setLoadingState(true);
   const formVal = data?.value;
   const res = await updateOrderApi(formVal);
   if (res?.success) {
     store.initializeOrders();
   }
+  store.setLoadingState(false);
+  store.setModalState(false);
 };
 const handleDelete = async (id: string) => {
+  store.setLoadingState(true);
   const res = await archiveOrderApi(id);
   if (res?.success) {
     store.initializeOrders();
   }
+  store.setLoadingState(false);
+  store.setModalState(false);
 };
 </script>
