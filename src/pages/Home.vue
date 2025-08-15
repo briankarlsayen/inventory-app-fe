@@ -6,12 +6,18 @@
       <div class="dashboard-card">
         <span class="text-xs text-gray-600 uppercase">Total Sales</span>
         <p>
-          {{ formatPrice(data?.totalSales) }}
+          <b>
+            {{ formatPrice(data?.totalSales) }}
+          </b>
         </p>
       </div>
       <div class="dashboard-card">
         <span class="text-xs text-gray-600 uppercase">Weekly Top Product</span>
-        <p>{{ data.weeklyTopProduct }}</p>
+        <p>
+          <b>
+            {{ data.weeklyTopProduct }}
+          </b>
+        </p>
       </div>
       <!-- <div class="dashboard-card">
         <span class="text-xs text-gray-600 uppercase">Low Stock Count:</span>
@@ -32,7 +38,7 @@
       <div class="flex w-full flex-col">
         <BarChart :data="data.sales[selectedRange]" :range="selectedRange" />
       </div>
-      <div class="flex w-full flex-col justify-between">
+      <div class="flex w-full flex-col justify-between items-center">
         <PieChart
           :label="data.products[selectedRange].label"
           :data="data.products[selectedRange].count"

@@ -25,7 +25,7 @@ export default defineComponent({
 <template>
   <div class="w-72 bg-blue-600 text-white justify-between flex flex-col">
     <div>
-      <h4 class="text-center pt-4 pb-4">LOGO</h4>
+      <h4 class="text-center pt-4 pb-4">SILONG CAFE</h4>
       <div class="flex flex-col items-center pt-8 h-full">
         <div class="w-fit flex gap-2 flex-col">
           <p

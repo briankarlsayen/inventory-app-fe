@@ -2,7 +2,7 @@
   <transition name="fade">
     <div
       v-if="show"
-      class="fixed inset-0 bg-white/50 z-50 flex items-center justify-center"
+      class="fixed inset-0 bg-gray-400/50 z-50 flex items-center justify-center"
     >
       <div class="bg-white w-full max-w-sm mx-4 p-6 rounded-lg shadow-xl">
         <!-- Title -->

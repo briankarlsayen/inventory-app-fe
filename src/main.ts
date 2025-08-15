@@ -68,6 +68,14 @@ const fetchInitialData = async () => {
 
 let initialized = false;
 
+function hideLoader() {
+  const loader = document.getElementById("loading-screen");
+  if (loader) {
+    loader.style.opacity = "0";
+    setTimeout(() => loader.remove(), 500);
+  }
+}
+
 router.beforeEach(async (to, _from, next) => {
   const auth = isAuthenticated();
 
@@ -79,6 +87,7 @@ router.beforeEach(async (to, _from, next) => {
     try {
       await fetchInitialData();
       initialized = true;
+      hideLoader();
     } catch (err) {
       console.error("❌ Initialization failed:", err);
       return next({ name: "Login" });

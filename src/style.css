@@ -80,7 +80,7 @@ th {
 }
 
 .dashboard-card {
-  @apply rounded-md shadow p-4 text-sm leading-relaxed font-normal w-full max-w-[300px] h-[100px];
+  @apply rounded-md shadow p-4 text-sm leading-relaxed font-normal w-full md:max-w-[300px] h-[100px] md:text-left text-center;
 }
 .dashboard-card p {
   @apply text-base leading-relaxed;

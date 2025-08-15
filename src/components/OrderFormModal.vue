@@ -2,7 +2,7 @@
   <transition name="fade">
     <div
       v-if="show"
-      class="fixed inset-0 bg-white/50 z-50 flex items-center justify-center"
+      class="fixed inset-0 bg-gray-400/50 z-50 flex items-center justify-center"
     >
       <div
         class="bg-white rounded-xl shadow-lg w-full max-w-xl mx-4 p-6 relative"
@@ -110,28 +110,23 @@
         <!-- Footer slot (optional submit buttons) -->
         <div class="mt-4 text-right">
           <slot name="footer">
-            <button
-              @click="$emit('close')"
-              class="px-4 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 mr-2"
-            >
-              Cancel
-            </button>
-
-            <BaseButton
-              class="btn btn-primary w-full"
-              type="submit"
-              :loading="isLoading"
-              @click="submitForm"
-            >
-              Submit
-            </BaseButton>
-            <!-- <button
-              type="submit"
-              @click="submitForm"
-              class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Submit
-            </button> -->
+            <div class="flex flex-row-reverse gap-2">
+              <BaseButton
+                type="submit"
+                class="btn btn-primary"
+                :loading="isLoading"
+                @click="submitForm"
+              >
+                Submit
+              </BaseButton>
+              <BaseButton
+                :disabled="isLoading"
+                @click="$emit('close')"
+                class="px-4 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </BaseButton>
+            </div>
           </slot>
         </div>
       </div>

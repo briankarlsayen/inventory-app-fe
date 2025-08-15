@@ -9,7 +9,7 @@
           <Menu v-if="!isOpen" />
           <X v-else />
         </button>
-        <p>LOGO</p>
+        <p>SILONG CAFE</p>
       </div>
       <div class="pr-2">
         <button
