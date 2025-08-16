@@ -70,7 +70,7 @@ const handleLogin = async () => {
     return router.push("/app");
   }
   isLoading.value = false;
-  errorMsg.value = login?.error;
+  errorMsg.value = login?.error ?? "Something went wrong, Please try again";
 };
 </script>
 

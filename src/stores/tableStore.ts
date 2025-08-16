@@ -144,7 +144,8 @@ export const useTableStore = defineStore("table", {
     },
     async initializeStockItems() {
       const res = await getStockItemsApi();
-      const formatData = res?.data.map((item) => {
+      if (!res.success) return;
+      const formatData = res?.data?.map((item) => {
         return {
           id: item?.id,
           name: item?.name,

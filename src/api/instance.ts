@@ -2,8 +2,7 @@ import axios from "axios";
 
 const timeoutMs = 30000;
 
-// export const baseURL = "https://inventory-app-evnr.onrender.com/api/inventory";
-export const baseURL = "http://127.0.0.1:8000/api/inventory";
+export const baseURL = import.meta.env.VITE_API_URL;
 
 export const instance = axios.create({
   baseURL,
