@@ -48,6 +48,10 @@ TODOS
 BUG
 [x] login failed when with access, refresh token
 [x] deleted selected item on order is lost forever
+[x] incorrect order date when i update others
+[x] submission of order
+[ ] negative number values on forms
+[ ] add loading indicator on accessing dashboard
 
 ENCHANCEMENT
 [ ] apply adjustment and discount on order page

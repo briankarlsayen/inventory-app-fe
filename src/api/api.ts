@@ -24,7 +24,7 @@ interface ICreateStockReq {
   date: string;
 }
 
-interface ICreateProductReq {
+export interface ICreateProductReq {
   name: string;
   description: string;
   price: number;
@@ -32,7 +32,7 @@ interface ICreateProductReq {
   size: string;
 }
 
-interface IUpdateProductReq extends ICreateProductReq {
+export interface IUpdateProductReq extends ICreateProductReq {
   id: string;
 }
 
@@ -225,7 +225,7 @@ export const getOrdersApi = async (): Promise<IDefaultGetApiResponse> => {
 };
 
 export const createOrderApi = async (
-  props: ICreateProductReq
+  props: any
 ): Promise<IDefaultGetApiResponse> => {
   return await routePostApi({ apiRoute: "/order/", params: props })
     .then(({ data, success }) => {
@@ -237,7 +237,7 @@ export const createOrderApi = async (
 };
 
 export const updateOrderApi = async (
-  props: IUpdateProductReq
+  props: any
 ): Promise<IDefaultGetApiResponse> => {
   return await routeUpdateApi({
     apiRoute: "/order/" + props?.id,

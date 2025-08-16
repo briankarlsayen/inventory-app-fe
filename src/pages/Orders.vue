@@ -16,7 +16,13 @@
 import { computed } from "vue";
 import { useTableStore } from "../stores/tableStore";
 import BaseTable from "../components/BaseTable.vue";
-import { archiveOrderApi, createOrderApi, updateOrderApi } from "../api/api";
+import {
+  archiveOrderApi,
+  createOrderApi,
+  updateOrderApi,
+  type ICreateProductReq,
+  type IUpdateProductReq,
+} from "../api/api";
 
 const store = useTableStore();
 
@@ -35,19 +41,41 @@ const headers = [
   },
 ];
 
+const today = new Date().toISOString().slice(0, 10);
+
 const initialFormDetails = {
   products: [],
   paymentType: "cash",
   totalPayment: 0,
+  date: today,
 };
 
 store.setInitialFormData(initialFormDetails);
 
 const tableData = computed(() => store.orders);
 
+const formatFormData = (data) => {
+  const val = data.value;
+  const formatProducts = val.products.map((item: any) => {
+    return {
+      product: item?.id,
+      quantity: item?.quantity,
+      purchase_price: item?.purchasePrice,
+    };
+  });
+  return {
+    id: val?.id,
+    products: formatProducts,
+    total_amount: val?.totalPayment,
+    payment_type: val?.paymentType,
+    date: val?.date,
+  };
+};
+
 const handleAdd = async (data: any) => {
   store.setLoadingState(true);
-  const res = await createOrderApi(data?.value);
+  const formData = formatFormData(data);
+  const res = await createOrderApi(formData);
   if (res?.success) {
     store.initializeOrders();
   }
@@ -56,7 +84,7 @@ const handleAdd = async (data: any) => {
 };
 const handleEdit = async (data: any) => {
   store.setLoadingState(true);
-  const formVal = data?.value;
+  const formVal = formatFormData(data);
   const res = await updateOrderApi(formVal);
   if (res?.success) {
     store.initializeOrders();

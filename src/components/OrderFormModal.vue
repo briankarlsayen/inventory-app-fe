@@ -158,9 +158,10 @@ const emit = defineEmits(["close", "submit"]);
 const store = useTableStore();
 
 const products = computed(() => store.products);
-const isLoading = ref(false);
+const isLoading = computed(() => store.isTableModalLoading);
 
 const selectedProducts = computed<ISelectedProduct>(() => store?.formData);
+
 const selectedList = computed({
   get: () => store.selectProductIds,
   set: (val) => {
@@ -182,26 +183,27 @@ const paymentField = computed({
 });
 const paymentList = ["cash", "gcash"];
 
-const today = new Date().toISOString().slice(0, 10);
-
-const date = ref(today);
+const date = computed({
+  get: () => store.formData.date,
+  set: (val) => (store.formData.date = val),
+});
 
 function submitForm() {
-  const formatProducts = selectedProducts.value.products.map((item) => {
-    return {
-      product: item?.id,
-      quantity: item?.quantity,
-      purchase_price: item?.purchasePrice,
-    };
-  });
-  const submitForm = {
-    id: selectedProducts?.value?.id,
-    products: formatProducts,
-    total_amount: totalPrice?.value,
-    payment_type: paymentField?.value,
-    date: date?.value,
-  };
-  store.formData = submitForm;
+  // const formatProducts = selectedProducts.value.products.map((item) => {
+  //   return {
+  //     product: item?.id,
+  //     quantity: item?.quantity,
+  //     purchase_price: item?.purchasePrice,
+  //   };
+  // });
+  // const submitForm = {
+  //   id: selectedProducts?.value?.id,
+  //   products: formatProducts,
+  //   total_amount: totalPrice?.value,
+  //   payment_type: paymentField?.value,
+  //   date: date?.value,
+  // };
+  store.formData.totalPayment = totalPrice.value;
   emit("submit");
 }
 const displayLabel = (id: string) => {
