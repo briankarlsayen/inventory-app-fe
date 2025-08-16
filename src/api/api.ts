@@ -81,17 +81,6 @@ export const getStockItemsApi = async (): Promise<IDefaultGetApiResponse> => {
     });
 };
 
-export const getItemCategoriesApi =
-  async (): Promise<IDefaultGetApiResponse> => {
-    return await routeGetApi({ apiRoute: "/category/" })
-      .then(({ data, success }) => {
-        return { data, success };
-      })
-      .catch(({ data, success }) => {
-        return { ...data, success };
-      });
-  };
-
 export const createStockItemApi = async (
   props: ICreateStockItemReq
 ): Promise<IDefaultGetApiResponse> => {

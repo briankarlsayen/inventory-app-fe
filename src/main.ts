@@ -12,6 +12,7 @@ import DefaultLayout from "./layout/DefaultLayout.vue";
 import { useTableStore } from "./stores/tableStore";
 import Products from "./pages/Products.vue";
 import Orders from "./pages/Orders.vue";
+import Notfound from "./pages/NotFound.vue";
 
 const routes = [
   {
@@ -34,6 +35,12 @@ const routes = [
       { path: "/app/products", component: Products },
       { path: "/app/orders", component: Orders },
     ],
+  },
+  {
+    path: "/:catchAll(.*)",
+    name: "not-found",
+    component: Notfound,
+    children: [],
   },
 ];
 
@@ -58,7 +65,6 @@ function isAuthenticated() {
 const fetchInitialData = async () => {
   const store = useTableStore();
 
-  await store.initializeCategories();
   await store.initializeStockItems();
   await store.initializeProducts();
   await store.initializeOrders();
@@ -80,6 +86,8 @@ router.beforeEach(async (to, _from, next) => {
   const auth = isAuthenticated();
 
   if (to.meta.requiresAuth && !auth) {
+    hideLoader();
+
     next({ name: "Login" });
   }
 
@@ -93,6 +101,8 @@ router.beforeEach(async (to, _from, next) => {
       return next({ name: "Login" });
     }
   }
+
+  hideLoader();
 
   next();
 });

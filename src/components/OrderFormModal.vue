@@ -24,7 +24,7 @@
             :options="products"
             @select="handleSelectOption"
           />
-          <div v-if="selectedList?.length">
+          <div v-if="selectedList?.length" class="pt-2">
             <!-- product form -->
             <div class="pb-6">
               <div class="grid grid-cols-12 gap-2 w-full pb-4">
@@ -72,7 +72,7 @@
             <div class="pt-8 flex flex-col gap-2">
               <div class="grid grid-cols-6">
                 <p class="col-span-4">Date</p>
-                <div class="col-span-2">
+                <div class="md:col-span-2 col-span-6">
                   <input
                     v-model="date"
                     type="date"
@@ -80,12 +80,12 @@
                   />
                 </div>
               </div>
-              <div class="grid grid-cols-4 pt-4">
+              <div class="grid grid-cols-4 pt-4 gap-2">
                 <p class="col-span-3 items-center">Payment</p>
                 <select
                   id="item"
                   v-model="paymentField"
-                  class="w-full border rounded px-3 py-2 col-span-1"
+                  class="w-full border rounded px-3 py-2 md:col-span-1 col-span-6"
                 >
                   <option
                     v-for="option in paymentList"
@@ -203,13 +203,7 @@ function submitForm() {
   };
   store.formData = submitForm;
   emit("submit");
-  closeModal();
 }
-
-const closeModal = () => {
-  emit("close");
-};
-
 const displayLabel = (id: string) => {
   const data = selectedProducts?.value.products.find((item) => item.id === id);
   return data?.size ? `${data?.name} ${data?.size}` : data?.name;

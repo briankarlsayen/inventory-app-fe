@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import {
   getDashboardApi,
-  getItemCategoriesApi,
   getOrdersApi,
   getProductsApi,
   getStockItemsApi,
@@ -100,7 +99,6 @@ export const useTableStore = defineStore("table", {
     initialFormData: {} as any,
     tableHeader: [] as any[],
     errors: {},
-    categories: [] as any[],
     stockItems: [] as any[],
     stocks: [] as any[],
     products: [] as IProduct[],
@@ -151,16 +149,11 @@ export const useTableStore = defineStore("table", {
           id: item?.id,
           name: item?.name,
           reorderLevel: item?.reorder_level,
-          category: item?.category_details,
+          category: item?.category,
           unit: item?.unit,
         };
       });
       this.stockItems = formatData;
-    },
-    async initializeCategories() {
-      const res = await getItemCategoriesApi();
-      if (!res.success) return;
-      this.categories = res.data;
     },
     async initializeProducts() {
       const res = await getProductsApi();

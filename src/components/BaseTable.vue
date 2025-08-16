@@ -33,7 +33,6 @@
             v-for="(row, rowIndex) in paginatedRows"
             :key="rowIndex"
             class="hover:bg-gray-50 cursor-pointer"
-            @click="$emit('row-click', row)"
           >
             <td
               v-for="(header, colIndex) in headers"
@@ -43,7 +42,9 @@
               {{
                 typeof row[header.key] === "object" && row[header.key] !== null
                   ? row[header.key].name
-                  : row[header.key]
+                  : !!row[header.key]
+                  ? row[header.key]
+                  : "-"
               }}
             </td>
             <td class="px-4 py-2 text-sm text-gray-700 flex gap-1">

@@ -22,7 +22,6 @@ import {
 } from "../api/api";
 
 const store = useTableStore();
-const categories = computed(() => store.categories);
 
 const headers = [
   {
@@ -63,7 +62,7 @@ const tableFormFields: TableFormFields[] = [
     label: "Category",
     default: "",
     inputType: "select",
-    options: categories?.value ?? [],
+    options: ["milk", "dairy", "coffee", "baking", "others"],
     rules: [{ required: true, message: "Category is required" }],
   },
   {
@@ -91,7 +90,7 @@ const handleAdd = async (data: any) => {
     name: val?.name,
     unit: val?.unit,
     reorder_level: val?.reorderLevel,
-    category: val?.category?.id,
+    category: val?.category,
   };
   const res = await createStockItemApi(formVal);
   if (res?.success) {
@@ -108,7 +107,7 @@ const handleEdit = async (data: any) => {
     name: val?.name,
     unit: val?.unit,
     reorder_level: val?.reorderLevel,
-    category: val?.category?.id,
+    category: val?.category,
   };
   const res = await updateStockItemApi(formVal);
   if (res?.success) {

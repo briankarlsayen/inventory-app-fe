@@ -14,12 +14,11 @@
 </template>
 <script setup lang="tsx">
 import { computed } from "vue";
-import { useTableStore, type TableFormFields } from "../stores/tableStore";
+import { useTableStore } from "../stores/tableStore";
 import BaseTable from "../components/BaseTable.vue";
 import { archiveOrderApi, createOrderApi, updateOrderApi } from "../api/api";
 
 const store = useTableStore();
-const categories = computed(() => store.categories);
 
 const headers = [
   {
@@ -36,38 +35,6 @@ const headers = [
   },
 ];
 
-const tableFormFields: TableFormFields[] = [
-  {
-    key: "name",
-    label: "Name",
-    default: "",
-    inputType: "text",
-    rules: [{ required: true, message: "Name is required" }],
-  },
-  {
-    key: "unit",
-    label: "Unit",
-    default: "",
-    inputType: "text",
-    rules: [{ required: true, message: "Unit is required" }],
-  },
-  {
-    key: "category",
-    label: "Category",
-    default: "",
-    inputType: "select",
-    options: categories?.value ?? [],
-    rules: [{ required: true, message: "Category is required" }],
-  },
-  {
-    key: "reorderLevel",
-    label: "Reorder Level",
-    default: "0",
-    inputType: "number",
-    rules: [],
-  },
-];
-
 const initialFormDetails = {
   products: [],
   paymentType: "cash",
@@ -75,7 +42,6 @@ const initialFormDetails = {
 };
 
 store.setInitialFormData(initialFormDetails);
-store.setInputFields(tableFormFields);
 
 const tableData = computed(() => store.orders);
 
