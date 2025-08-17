@@ -52,6 +52,7 @@
             </select>
             <input
               v-if="item.inputType === 'number'"
+              min="0"
               v-model="form[item.key]"
               type="number"
               class="w-full border rounded px-3 py-2"

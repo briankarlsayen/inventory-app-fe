@@ -55,7 +55,7 @@
 </template>
 
 <script lang="tsx" setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import BarChart from "../components/BarChart.vue";
 import PieChart from "../components/PieChart.vue";
 import { useTableStore } from "../stores/tableStore";
@@ -65,8 +65,4 @@ const store = useTableStore();
 
 const data = computed(() => store.dashboardDetails);
 const selectedRange = ref("week");
-
-onMounted(() => {
-  store.initializeDashboardDetails();
-});
 </script>

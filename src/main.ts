@@ -29,7 +29,16 @@ const routes = [
     component: PrivateLayout,
     meta: { requiresAuth: true },
     children: [
-      { path: "/app/", component: HomePage },
+      {
+        path: "/app/",
+        component: HomePage,
+        beforeEnter: async () => {
+          const store = useTableStore();
+          store.setFetchLoading(true);
+          await store.initializeDashboardDetails();
+          store.setFetchLoading(false);
+        },
+      },
       { path: "/app/stocks", component: Stocks },
       { path: "/app/stock-items", component: StockItems },
       { path: "/app/products", component: Products },

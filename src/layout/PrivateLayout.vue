@@ -1,10 +1,11 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
 import ConfirmDialog from "../components/ConfirmDialog.vue";
 import { useRouter } from "vue-router";
 import { proccessLogout } from "../utlis";
+import { useTableStore } from "../stores/tableStore";
 export default defineComponent({
   name: "PrivateLayout",
   components: {
@@ -20,10 +21,13 @@ export default defineComponent({
       showDialog.value = false;
       router.push("/login");
     };
+    const store = useTableStore();
+    const loading = computed(() => store.isFetchLoading);
 
     return {
       showDialog,
       handleLogout,
+      loading,
     };
   },
 });
@@ -44,7 +48,14 @@ export default defineComponent({
       @cancel="showDialog = false"
       @confirm="handleLogout"
     />
-    <div class="w-full">
+
+    <div v-if="loading" class="w-full flex justify-center items-center">
+      <div>
+        <div class="loader"></div>
+        <!-- <h1>Loading</h1> -->
+      </div>
+    </div>
+    <div v-else class="w-full">
       <router-view />
     </div>
   </div>

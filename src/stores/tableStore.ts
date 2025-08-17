@@ -124,6 +124,7 @@ export const useTableStore = defineStore("table", {
     } as IDashboardDetails,
     isTableModalLoading: false,
     isTableModalOpen: false,
+    isFetchLoading: false,
   }),
   actions: {
     async fetchStocks() {
@@ -227,6 +228,7 @@ export const useTableStore = defineStore("table", {
         };
         this.dashboardDetails = formatData;
       }
+      return;
     },
     setTableHeader(props: any) {
       this.tableHeader = props;
@@ -265,6 +267,9 @@ export const useTableStore = defineStore("table", {
     },
     setModalState(props: boolean) {
       this.isTableModalOpen = props;
+    },
+    setFetchLoading(props: boolean) {
+      this.isFetchLoading = props;
     },
   },
 });

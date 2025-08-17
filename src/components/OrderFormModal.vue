@@ -57,6 +57,7 @@
                 <div class="col-span-3">
                   <input
                     v-model="item.quantity"
+                    min="1"
                     @input="handleInput(item?.id)"
                     type="number"
                     class="w-full border rounded px-3 py-2"
@@ -135,7 +136,7 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useTableStore } from "../stores/tableStore";
 import MultiSelect from "./MultiSelect.vue";
 import BaseButton from "./BaseButton.vue";
