@@ -48,24 +48,23 @@
               }}
             </td>
             <td class="px-4 py-2 text-sm text-gray-700 flex gap-1">
-              <SquarePen
-                class="hover:bg-gray-100 p-2 rounded-md"
-                color="#e5a50a"
-                :size="36"
+              <button
+                class="hover:bg-gray-100 cursor-pointer text-[#e5a50a] disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-50"
                 @click="() => handleOpenEditForm(row)"
-              />
-
-              <Trash
-                class="hover:bg-gray-100 p-2 rounded-md"
-                color="#a51d2d"
-                :size="36"
+              >
+                <SquarePen class="p-2 rounded-md" :size="36" />
+              </button>
+              <button
+                class="hover:bg-gray-100 cursor-pointer text-[#a51d2d] disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-50"
                 @click="
                   () => {
                     refId = row.id;
                     showDialog = true;
                   }
                 "
-              />
+              >
+                <Trash class="p-2 rounded-md" :size="36" />
+              </button>
             </td>
           </tr>
         </tbody>

@@ -6,14 +6,20 @@ import ConfirmDialog from "../components/ConfirmDialog.vue";
 import { useRouter } from "vue-router";
 import { proccessLogout } from "../utlis";
 import { useTableStore } from "../stores/tableStore";
+import { TriangleAlert } from "lucide-vue-next";
+import { useUserStore } from "../stores/userStore";
 export default defineComponent({
   name: "PrivateLayout",
   components: {
     Sidebar,
     Navbar,
     ConfirmDialog,
+    TriangleAlert,
   },
   setup() {
+    const userStore = useUserStore();
+    const disableFunction = computed(() => userStore.disableFunction());
+
     const router = useRouter();
     const showDialog = ref(false);
     const handleLogout = () => {
@@ -28,6 +34,7 @@ export default defineComponent({
       showDialog,
       handleLogout,
       loading,
+      disableFunction,
     };
   },
 });
@@ -52,10 +59,15 @@ export default defineComponent({
     <div v-if="loading" class="w-full flex justify-center items-center">
       <div>
         <div class="loader"></div>
-        <!-- <h1>Loading</h1> -->
       </div>
     </div>
     <div v-else class="w-full">
+      <div v-if="disableFunction" class="pt-4 px-4 flex gap-2 items-center">
+        <TriangleAlert color="#FFA500" />
+        <span class="text-xs"
+          >Some functionalities are disabled on Guest account.</span
+        >
+      </div>
       <router-view />
     </div>
   </div>

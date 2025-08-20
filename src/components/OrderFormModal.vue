@@ -117,13 +117,14 @@
                 class="btn btn-primary"
                 :loading="isLoading"
                 @click="submitForm"
+                :disabled="disableFunction"
               >
                 Submit
               </BaseButton>
               <BaseButton
                 :disabled="isLoading"
                 @click="$emit('close')"
-                class="px-4 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300"
+                class="btn btn-secondary"
               >
                 Cancel
               </BaseButton>
@@ -140,6 +141,7 @@ import { computed } from "vue";
 import { useTableStore } from "../stores/tableStore";
 import MultiSelect from "./MultiSelect.vue";
 import BaseButton from "./BaseButton.vue";
+import { useUserStore } from "../stores/userStore";
 
 interface ISelectedProduct {
   id?: string;
@@ -188,6 +190,9 @@ const date = computed({
   get: () => store.formData.date,
   set: (val) => (store.formData.date = val),
 });
+
+const userStore = useUserStore();
+const disableFunction = computed(() => userStore.disableFunction());
 
 function submitForm() {
   // const formatProducts = selectedProducts.value.products.map((item) => {

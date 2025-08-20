@@ -17,18 +17,17 @@
 
         <!-- Actions -->
         <div class="flex justify-end space-x-3">
-          <button
-            @click="$emit('cancel')"
-            class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
-          >
+          <BaseButton @click="$emit('cancel')" class="btn btn-secondary">
             Cancel
-          </button>
-          <button
+          </BaseButton>
+
+          <BaseButton
             @click="$emit('confirm')"
             class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            :disabled="disableFunction"
           >
             Confirm
-          </button>
+          </BaseButton>
         </div>
       </div>
     </div>
@@ -36,12 +35,19 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from "vue";
+import { useUserStore } from "../stores/userStore";
+import BaseButton from "./BaseButton.vue";
+
+const props = defineProps({
   show: Boolean,
   title: String,
   message: String,
 });
 defineEmits(["confirm", "cancel"]);
+
+const userStore = useUserStore();
+const disableFunction = computed(() => userStore.disableFunction(props?.title));
 </script>
 
 <style scoped>

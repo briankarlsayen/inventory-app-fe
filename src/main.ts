@@ -13,6 +13,8 @@ import { useTableStore } from "./stores/tableStore";
 import Products from "./pages/Products.vue";
 import Orders from "./pages/Orders.vue";
 import Notfound from "./pages/NotFound.vue";
+import { jwtDecode } from "jwt-decode";
+import { useUserStore } from "./stores/userStore";
 
 const routes = [
   {
@@ -68,7 +70,16 @@ const router = createRouter({
 });
 
 function isAuthenticated() {
-  return !!localStorage.getItem("access"); // or use a Pinia store
+  const accessToken = localStorage.getItem("access");
+  if (!accessToken) return false;
+  else {
+    const user: any = jwtDecode(accessToken);
+    console.log("user", user);
+    const userStore = useUserStore();
+    if (user?.role) userStore.setRole(user?.role);
+    return true;
+  }
+  // return !!localStorage.getItem("access"); // or use a Pinia store
 }
 
 const fetchInitialData = async () => {
