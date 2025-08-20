@@ -16,13 +16,7 @@
 import { computed } from "vue";
 import { useTableStore } from "../stores/tableStore";
 import BaseTable from "../components/BaseTable.vue";
-import {
-  archiveOrderApi,
-  createOrderApi,
-  updateOrderApi,
-  type ICreateProductReq,
-  type IUpdateProductReq,
-} from "../api/api";
+import { archiveOrderApi, createOrderApi, updateOrderApi } from "../api/api";
 
 const store = useTableStore();
 
