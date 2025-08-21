@@ -36,7 +36,7 @@ const routes = [
         path: "/login",
         component: LoginPage,
         name: "Login",
-        beforeEnter: (to, from, next) => {
+        beforeEnter: (_to, _from, next) => {
           const token = localStorage.getItem("access");
           if (!token) next();
           try {
