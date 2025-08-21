@@ -36,6 +36,7 @@
           class="btn btn-primary w-full"
           type="submit"
           :loading="isLoading"
+          :full="true"
         >
           Login
         </BaseButton>
@@ -46,15 +47,33 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { loginApi } from "../api/api";
+import { useRoute, useRouter } from "vue-router";
+import { loginApi, loginDecryptApi } from "../api/api";
 import BaseButton from "../components/BaseButton.vue";
 const router = useRouter();
+const route = useRoute();
 
 const username = ref("");
 const password = ref("");
 const errorMsg = ref("");
 const isLoading = ref(false);
+const authQuery = route?.query?.auth;
+
+const processLoginUrl = async (token: string) => {
+  const response = await loginDecryptApi({ token });
+  if (response?.success) {
+    const res = response.data;
+    username.value = res.username;
+    password.value = res.password;
+    await handleLogin();
+    return;
+  }
+  return router.push("/not-found");
+};
+
+if (authQuery) {
+  processLoginUrl(authQuery as string);
+}
 
 const handleLogin = async () => {
   errorMsg.value = "";

@@ -274,3 +274,15 @@ export const getDashboardApi = async (): Promise<IDefaultGetApiResponse> => {
       return { ...data, success };
     });
 };
+
+export const loginDecryptApi = async (
+  props: any
+): Promise<IDefaultGetApiResponse> => {
+  return await routePostApi({ apiRoute: "/auth/login-decrypt/", params: props })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};

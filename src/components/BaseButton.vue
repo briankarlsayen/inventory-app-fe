@@ -1,5 +1,5 @@
 <template>
-  <div class="relative group inline-block">
+  <div :class="containerClass">
     <button :type="type" :disabled="loading || disabled" :class="computedClass">
       <slot />
       <svg
@@ -42,7 +42,12 @@ const props = defineProps<{
   variant?: "primary" | "secondary";
   class: string;
   type?: "button" | "submit" | "reset";
+  full?: boolean;
 }>();
+
+const containerClass = props?.full
+  ? "relative group w-full"
+  : "relative group inline-block";
 
 const baseClass =
   "rounded-md flex items-center justify-center gap-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed";

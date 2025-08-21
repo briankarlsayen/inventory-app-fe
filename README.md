@@ -55,3 +55,7 @@ BUG
 
 ENCHANCEMENT
 [ ] apply adjustment and discount on order page
+[x] apply login by url function
+--- url should be encrypted
+--- /login?account=sdaopjczpxmcnpzx12143
+--- access url > decrypt login account > IF success use login api ELSE redirect to 404 page
