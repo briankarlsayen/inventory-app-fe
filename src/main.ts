@@ -15,6 +15,7 @@ import Orders from "./pages/Orders.vue";
 import Notfound from "./pages/NotFound.vue";
 import { jwtDecode } from "jwt-decode";
 import { useUserStore } from "./stores/userStore";
+import { removeLoginTokens } from "./utlis";
 
 const routes = [
   {
@@ -22,9 +23,32 @@ const routes = [
     component: DefaultLayout,
     redirect: () => {
       const authKey = localStorage.getItem("access");
+      try {
+        jwtDecode(authKey);
+      } catch (error) {
+        removeLoginTokens();
+      }
+
       return { path: authKey ? "/app" : "/login" };
     },
-    children: [{ path: "/login", component: LoginPage, name: "Login" }],
+    children: [
+      {
+        path: "/login",
+        component: LoginPage,
+        name: "Login",
+        beforeEnter: (to, from, next) => {
+          const token = localStorage.getItem("access");
+          if (!token) next();
+          try {
+            jwtDecode(token);
+            return next({ path: "/app" });
+          } catch (error) {
+            // remove login tokens
+            removeLoginTokens();
+          }
+        },
+      },
+    ],
   },
   {
     path: "/app",
@@ -73,10 +97,15 @@ function isAuthenticated() {
   const accessToken = localStorage.getItem("access");
   if (!accessToken) return false;
   else {
-    const user: any = jwtDecode(accessToken);
-    console.log("user", user);
-    const userStore = useUserStore();
-    if (user?.role) userStore.setRole(user?.role);
+    try {
+      const user: any = jwtDecode(accessToken);
+      console.log("user", user);
+      const userStore = useUserStore();
+      if (user?.role) userStore.setRole(user?.role);
+    } catch (error) {
+      removeLoginTokens();
+      return false;
+    }
     return true;
   }
   // return !!localStorage.getItem("access"); // or use a Pinia store

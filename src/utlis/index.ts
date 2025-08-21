@@ -20,3 +20,8 @@ export const formatPrice = (val: number) => {
     currency: "PHP",
   });
 };
+
+export const removeLoginTokens = () => {
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
+};
