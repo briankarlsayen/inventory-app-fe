@@ -58,7 +58,13 @@ const routes = [
       {
         path: "/app/",
         component: HomePage,
-        beforeEnter: async () => {
+        beforeEnter: async (_to, from) => {
+          if (
+            from?.path === "/" ||
+            from?.path === "/app" ||
+            from?.path === "/login"
+          )
+            return;
           const store = useTableStore();
           store.setFetchLoading(true);
           await store.initializeDashboardDetails();
@@ -99,7 +105,6 @@ function isAuthenticated() {
   else {
     try {
       const user: any = jwtDecode(accessToken);
-      console.log("user", user);
       const userStore = useUserStore();
       if (user?.role) userStore.setRole(user?.role);
     } catch (error) {
@@ -108,7 +113,6 @@ function isAuthenticated() {
     }
     return true;
   }
-  // return !!localStorage.getItem("access"); // or use a Pinia store
 }
 
 const fetchInitialData = async () => {

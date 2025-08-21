@@ -13,7 +13,6 @@ export const useUserStore = defineStore("user", {
       this.user.role = props;
     },
     disableFunction(props?: string) {
-      console.log("props", props);
       const role = this.user.role;
       if (role === 3) {
         if (props?.toLowerCase() === "logout") return false;
