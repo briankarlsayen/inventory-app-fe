@@ -145,7 +145,7 @@ export const useTableStore = defineStore("table", {
     },
     async initializeStockItems() {
       const res = await getStockItemsApi();
-      if (!res.success) return;
+      if (!res?.success) return;
       const formatData = res?.data?.map((item) => {
         return {
           id: item?.id,
@@ -159,12 +159,12 @@ export const useTableStore = defineStore("table", {
     },
     async initializeProducts() {
       const res = await getProductsApi();
-      if (!res.success) return;
+      if (!res?.success) return;
       this.products = res.data;
     },
     async initializeOrders() {
       const res = await getOrdersApi();
-      if (!res.success) return;
+      if (!res?.success) return;
       const formatData = res?.data.map((order) => {
         return {
           id: order?.id,

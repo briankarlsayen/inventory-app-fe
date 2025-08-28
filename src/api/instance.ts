@@ -50,7 +50,7 @@ instance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post(baseURL + "auth/refresh/", {
+        const res = await axios.post(baseURL + "/auth/refresh/", {
           refresh: refreshToken,
         });
         let accessToken = res.data.access; // store new access
