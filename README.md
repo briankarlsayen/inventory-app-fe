@@ -10,22 +10,22 @@ Manage your inventory and track sales effortlessly with our powerful web applica
 
 ## Tech Stacks
 
-- **Framework**: VueJS(frontend), Django(backend)
+- **Framework**: VueJS(frontend), Django(backend)[Visit Backend](https://github.com/briankarlsayen/inventory-app)
 - **Database**: MongoDB
 - **State Management**: Pinia
 - **Styling**: Tailwindcss v4
 
 ## Installation
 
-### Clone repository
+#### Clone repository
 
-### Install dependencies
+#### Install dependencies
 
 ```
 npm install
 ```
 
-### Copy .env file
+#### Copy .env file
 
 ```
 cp .env.example .env
