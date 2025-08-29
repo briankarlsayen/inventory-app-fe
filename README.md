@@ -1,4 +1,4 @@
-# Silong
+# Inventory Frontend
 
 Manage your inventory and track sales effortlessly with our powerful web application. Monitor stock levels, and record transactions.
 [Visit Backend](https://github.com/briankarlsayen/inventory-app)
