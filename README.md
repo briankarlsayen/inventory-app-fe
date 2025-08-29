@@ -1,6 +1,7 @@
 # Silong
 
-Manage your inventory and track sales effortlessly with our powerful web application. Monitor stock levels, record transactions, and generate real-time reports to streamline your business operations. Simple, efficient, and accessible from anywhere, it’s the ultimate tool to keep your business organized and profitable.
+Manage your inventory and track sales effortlessly with our powerful web application. Monitor stock levels, and record transactions.
+[Visit Backend](https://github.com/briankarlsayen/inventory-app)
 
 ## Features
 
@@ -10,7 +11,7 @@ Manage your inventory and track sales effortlessly with our powerful web applica
 
 ## Tech Stacks
 
-- **Framework**: VueJS(frontend), Django(backend)[Visit Backend](https://github.com/briankarlsayen/inventory-app)
+- **Framework**: VueJS(frontend), Django(backend)
 - **Database**: MongoDB
 - **State Management**: Pinia
 - **Styling**: Tailwindcss v4
