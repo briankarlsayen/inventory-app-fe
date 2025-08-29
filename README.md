@@ -17,21 +17,21 @@ Manage your inventory and track sales effortlessly with our powerful web applica
 
 ## Installation
 
-# Clone repository
+### Clone repository
 
-# Install dependencies
+### Install dependencies
 
 ```
 npm install
 ```
 
-# Copy .env file
+### Copy .env file
 
 ```
 cp .env.example .env
 ```
 
-# Start application
+#### Start application
 
 ```
 npm run dev
