@@ -286,3 +286,13 @@ export const loginDecryptApi = async (
       return { ...data, success };
     });
 };
+
+export const checkerApi = async (): Promise<IDefaultGetApiResponse> => {
+  return await routeGetApi({ apiRoute: "/checker/" })
+    .then(({ data, success }) => {
+      return { data, success };
+    })
+    .catch(({ data, success }) => {
+      return { ...data, success };
+    });
+};

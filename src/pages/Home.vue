@@ -64,5 +64,5 @@ import { formatPrice } from "../utlis";
 const store = useTableStore();
 
 const data = computed(() => store.dashboardDetails);
-const selectedRange = ref("week");
+const selectedRange = ref("year");
 </script>

@@ -16,6 +16,7 @@ import Notfound from "./pages/NotFound.vue";
 import { jwtDecode } from "jwt-decode";
 import { useUserStore } from "./stores/userStore";
 import { removeLoginTokens } from "./utlis";
+import { checkerApi } from "./api/api";
 
 const routes = [
   {
@@ -137,6 +138,8 @@ function hideLoader() {
 
 router.beforeEach(async (to, _from, next) => {
   const auth = isAuthenticated();
+
+  await checkerApi();
 
   if (to.meta.requiresAuth && !auth) {
     hideLoader();
